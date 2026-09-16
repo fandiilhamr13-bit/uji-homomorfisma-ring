@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html lang="id">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Uji Homomorfisma Ring</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #000000;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            width: calc(100% - 40px);
+            max-width: 1000px;
+            margin: 20px auto 0;
+            padding: 45px 20px;
+
+            text-align: center;
+
+            background: rgba(153, 204, 255, 0.75);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            border: 2px solid #b8c0c8;
+            border-radius: 12px;
+        }
+
+        .header {
+             background: rgba(153, 204, 255, 0.75);
+             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            text-align: center;
+            padding: 45px 20px;
+
+            border: 2px solid #7fb8e8;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .header p {
+            margin-top: 10px;
+            font-size: 17px;
+            color: #333;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+    max-width: 1000px;
+    height: 80vh;
+    margin: 20px auto;
+    padding: 25px 20px 40px;
+
+    background: #EEF4F8;
+    border: 2px solid #B8C0C8;
+    border-radius: 16px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+
+        /* =========================
+           BOX
+        ========================= */
+
+        .box {
+            background: rgb(255, 255, 255);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        /* Scroll untuk isi text box */
+        .box {
+            background: #ffffff;
+            border: 2px solid #b8c0c8;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* =========================
+           PETUNJUK
+        ========================= */
+
+        .petunjuk {
+            background: #eeeeee;
+            border-radius: 9px;
+            padding: 20px;
+            line-height: 1.7;
+        }
+
+        .petunjuk h3 {
+            margin-top: 0;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+
+            border: 1px solid #ccc;
+            border-radius: 7px;
+
+            font-size: 15px;
+
+            background: white;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #b8c0c8;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+             border-color: #5b9bd5;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #222;
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .button-area {
+            margin-top: 25px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+
+            background: #000;
+            color: white;
+
+            border: none;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #333;
+        }
+
+
+        /* =========================
+           HASIL
+        ========================= */
+
+        .section-title {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+
+        /* =========================
+           INFORMASI FUNGSI
+        ========================= */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 30px;
+        }
+
+        .info-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item strong {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            text-align: center;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        .status-hijau {
+            background: #e7f6e7;
+            border-left: 6px solid #2e7d32;
+            color: #1b5e20;
+        }
+
+        .status-merah {
+            background: #fdeaea;
+            border-left: 6px solid #c62828;
+            color: #b71c1c;
+        }
+
+
+        /* =========================
+           SYARAT
+        ========================= */
+
+        .syarat {
+            background: #fafafa;
+            border-left: 5px solid #a2ff99;
+            padding: 20px;
+            border-radius: 7px;
+            line-height: 1.8;
+        }
+
+        .formula {
+            background: #f3f3f3;
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 7px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+
+        /* =========================
+           PENJELASAN
+        ========================= */
+
+        .penjelasan {
+            background: #fafafa;
+            border-left: 5px solid #99CCFF;
+            padding: 20px;
+            border-radius: 7px;
+            line-height: 1.8;
+        }
+
+        .penjelasan h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .penjelasan h4:first-child {
+            margin-top: 0;
+        }
+
+
+        /* =========================
+           KESIMPULAN
+        ========================= */
+
+        .kesimpulan {
+            text-align: center;
+            padding: 22px;
+            border-radius: 9px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .kesimpulan.hijau {
+            background: #e7f6e7;
+            color: #1b5e20;
+            border: 2px solid #4caf50;
+        }
+
+        .kesimpulan.merah {
+            background: #fdeaea;
+            color: #b71c1c;
+            border: 2px solid #ef5350;
+        }
+
+
+        /* =========================
+           TABEL
+        ========================= */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            background: #222;
+            color: white;
+            padding: 12px;
+            border: 1px solid #ccc;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+
+
+        /* =========================
+           KOSONG
+        ========================= */
+
+        .kosong {
+            color: #777;
+            font-style: italic;
+            padding: 10px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .form-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .header p {
+                font-size: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="header">
+
+    <h1>
+        Uji Homomorfisma Ring
+    </h1>
+
+    <p>
+        Pengujian Fungsi Pada Ring Bilangan Bulat Modulo
+    </p>
+
+</div>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         PETUNJUK
+    ========================= -->
+
+    <div class="box">
+
+        <div class="petunjuk">
+
+            <h3>
+                Petujuk Peggunaan:
+            </h3>
+
+            1. Masukkan nilai Ring Domain <strong>Z<sub>n</sub></strong>.<br>
+
+            2. Masukkan nilai Ring Kodomain <strong>Z<sub>m</sub></strong>.<br>
+
+            3. Masukkan variabel (Contoh: x, a, u).<br>
+
+            4. Pisahkan beberapa variabel dengan tanda koma apabila lebih dari satu
+            (Contoh: x,y).<br>
+
+            5. Masukkan fungsi menggunakan variabel yang telah diinput
+            (Contoh: 10*x, y+5, u+v).
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         INPUT
+    ========================= -->
+
+    <div class="box">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Ring Domain (Z<sub>n</sub>)
+                </label>
+
+                <input
+                    type="number"
+                    id="n"
+                    placeholder="Masukkan Nilai n"
+                    min="1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Ring Kodomain (Z<sub>m</sub>)
+                </label>
+
+                <input
+                    type="number"
+                    id="m"
+                    placeholder="Masukkan Nilai m"
+                    min="1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Variabel
+                </label>
+
+                <input
+                    type="text"
+                    id="variabel"
+                    placeholder="Masukkan Variabel"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Fungsi
+                </label>
+
+                <input
+                    type="text"
+                    id="fungsi"
+                    placeholder="Masukkan Fungsi"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="button-area">
+
+            <button onclick="ujiHomomorfisma()">
+                UJI HOMOMORFISMA
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         HASIL
+    ========================= -->
+
+    <div id="hasil"></div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   FUNGSI MODULO
+===================================================== */
+
+function modulo(a, m) {
+
+    return ((a % m) + m) % m;
+
+}
+
+
+/* =====================================================
+   MEMBUAT SEMUA ELEMEN DOMAIN
+===================================================== */
+
+function buatTuple(n, jumlahVariabel) {
+
+    let hasil = [];
+
+    function generate(tuple) {
+
+        if (tuple.length === jumlahVariabel) {
+
+            hasil.push([...tuple]);
+
+            return;
+
+        }
+
+        for (let i = 0; i < n; i++) {
+
+            tuple.push(i);
+
+            generate(tuple);
+
+            tuple.pop();
+
+        }
+
+    }
+
+    generate([]);
+
+    return hasil;
+
+}
+
+
+/* =====================================================
+   TAMPILKAN TUPLE
+===================================================== */
+
+function tampilTuple(tuple) {
+    if (tuple.length === 1) {
+        return tuple[0];
+    } else {
+        return "(" + tuple.join(", ") + ")";
+    }
+}
+
+
+/* =====================================================
+   FUNGSI DINAMIS
+===================================================== */
+
+function buatFungsi(variabel, fungsiInput, m) {
+
+    let daftarVariabel =
+        variabel
+        .split(",")
+        .map(v => v.trim())
+        .filter(v => v !== "");
+
+
+    if (daftarVariabel.length === 0) {
+
+        throw new Error(
+            "Variabel belum dimasukkan."
+        );
+
+    }
+
+
+    /* Validasi nama variabel */
+
+    for (let v of daftarVariabel) {
+
+        if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(v)) {
+
+            throw new Error(
+                "Nama variabel '" + v + "' tidak valid."
+            );
+
+        }
+
+    }
+
+
+    let fungsiJS;
+
+    try {
+
+        fungsiJS = new Function(
+            ...daftarVariabel,
+            "return " + fungsiInput
+        );
+
+    }
+
+    catch (error) {
+
+        throw new Error(
+            "Penulisan fungsi tidak valid."
+        );
+
+    }
+
+
+    return function(tuple) {
+
+        let nilai;
+
+        try {
+
+            nilai = fungsiJS(...tuple);
+
+        }
+
+        catch (error) {
+
+            throw new Error(
+                "Fungsi tidak dapat dihitung."
+            );
+
+        }
+
+
+        if (
+            typeof nilai !== "number" ||
+            !Number.isFinite(nilai)
+        ) {
+
+            throw new Error(
+                "Fungsi menghasilkan nilai yang tidak valid."
+            );
+
+        }
+
+
+        return modulo(nilai, m);
+
+    };
+
+}
+
+
+/* =====================================================
+   PENJUMLAHAN TUPLE
+===================================================== */
+
+function tambahTuple(a, b, n) {
+
+    return a.map(
+        (nilai, i) =>
+        modulo(nilai + b[i], n)
+    );
+
+}
+
+
+/* =====================================================
+   PERKALIAN TUPLE
+===================================================== */
+
+function kaliTuple(a, b, n) {
+
+    return a.map(
+        (nilai, i) =>
+        modulo(nilai * b[i], n)
+    );
+
+}
+
+
+/* =====================================================
+   FORMAT FUNGSI
+===================================================== */
+
+function formatFungsi(fungsi) {
+
+    return fungsi
+        .replace(/\*/g, " × ")
+        .replace(/\+/g, " + ")
+        .replace(/-/g, " − ");
+
+}
+
+
+/* =====================================================
+   UJI HOMOMORFISMA
+===================================================== */
+
+function ujiHomomorfisma() {
+
+    const n =
+        parseInt(
+            document.getElementById("n").value
+        );
+
+    const m =
+        parseInt(
+            document.getElementById("m").value
+        );
+
+    const variabelInput =
+        document
+        .getElementById("variabel")
+        .value
+        .trim();
+
+    const fungsiInput =
+        document
+        .getElementById("fungsi")
+        .value
+        .trim();
+
+
+    const hasil =
+        document.getElementById("hasil");
+
+
+    /* =================================================
+       VALIDASI
+    ================================================= */
+
+    if (
+        isNaN(n) ||
+        isNaN(m) ||
+        n < 1 ||
+        m < 1
+    ) {
+
+        hasil.innerHTML = `
+
+            <div class="box">
+
+                <div class="status status-merah">
+
+                    Ring Domain dan Ring Kodomain
+                    harus berupa bilangan bulat positif.
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    if (
+        variabelInput === "" ||
+        fungsiInput === ""
+    ) {
+
+        hasil.innerHTML = `
+
+            <div class="box">
+
+                <div class="status status-merah">
+
+                    Variabel dan fungsi harus diisi.
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    let variabel =
+        variabelInput
+        .split(",")
+        .map(v => v.trim())
+        .filter(v => v !== "");
+
+
+    let jumlahVariabel =
+        variabel.length;
+
+
+    /*
+       Jumlah elemen domain = n^k
+    */
+
+    let jumlahElemen =
+        Math.pow(n, jumlahVariabel);
+
+
+    /*
+       Agar browser tidak terlalu berat
+    */
+
+    if (jumlahElemen > 100000) {
+
+        hasil.innerHTML = `
+
+            <div class="box">
+
+                <div class="status status-merah">
+
+                    Jumlah elemen domain terlalu besar.
+
+                    <br><br>
+
+                    Banyak elemen:
+
+                    ${n}<sup>${jumlahVariabel}</sup>
+                    =
+                    ${jumlahElemen}
+
+                    <br><br>
+
+                    Silakan gunakan nilai n
+                    atau jumlah variabel yang lebih kecil.
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    try {
+
+        /* =============================================
+           BUAT FUNGSI
+        ============================================= */
+
+        const f =
+            buatFungsi(
+                variabelInput,
+                fungsiInput,
+                m
+            );
+
+
+        /* =============================================
+           BUAT DOMAIN
+        ============================================= */
+
+        const domain =
+            buatTuple(
+                n,
+                jumlahVariabel
+            );
+
+
+        let gagalJumlah = null;
+
+        let gagalKali = null;
+
+
+        /* =============================================
+           CEK PENJUMLAHAN
+        ============================================= */
+
+        for (let a of domain) {
+
+            for (let b of domain) {
+
+                let aTambahB =
+                    tambahTuple(a, b, n);
+
+
+                let kiri =
+                    f(aTambahB);
+
+
+                let kanan =
+                    modulo(
+                        f(a) + f(b),
+                        m
+                    );
+
+
+                if (kiri !== kanan) {
+
+                    gagalJumlah = {
+
+                        a: [...a],
+
+                        b: [...b],
+
+                        aTambahB:
+                            [...aTambahB],
+
+                        fa:
+                            f(a),
+
+                        fb:
+                            f(b),
+
+                        kiri:
+                            kiri,
+
+                        kanan:
+                            kanan
+
+                    };
+
+                    break;
+
+                }
+
+            }
+
+            if (gagalJumlah !== null) {
+                break;
+            }
+
+        }
+
+
+        /* =============================================
+           CEK PERKALIAN
+        ============================================= */
+
+        for (let a of domain) {
+
+            for (let b of domain) {
+
+                let aKaliB =
+                    kaliTuple(a, b, n);
+
+
+                let kiri =
+                    f(aKaliB);
+
+
+                let kanan =
+                    modulo(
+                        f(a) * f(b),
+                        m
+                    );
+
+
+                if (kiri !== kanan) {
+
+                    gagalKali = {
+
+                        a: [...a],
+
+                        b: [...b],
+
+                        aKaliB:
+                            [...aKaliB],
+
+                        fa:
+                            f(a),
+
+                        fb:
+                            f(b),
+
+                        kiri:
+                            kiri,
+
+                        kanan:
+                            kanan
+
+                    };
+
+                    break;
+
+                }
+
+            }
+
+            if (gagalKali !== null) {
+                break;
+            }
+
+        }
+
+
+        /* =============================================
+           INFORMASI FUNGSI
+        ============================================= */
+
+        let informasi = `
+
+            <div class="box">
+
+                <div class="section-title">
+                    Informasi Fungsi
+                </div>
+
+
+                <div class="info-grid">
+
+                    <div class="info-item">
+
+                        <strong>Ring Domain :</strong>
+
+                        Z<sub>${n}</sub>
+                        ${jumlahVariabel > 1
+                            ? `<sup>${jumlahVariabel}</sup>`
+                            : ""}
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <strong>Ring Kodomain :</strong>
+
+                        Z<sub>${m}</sub>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <strong>Variabel :</strong>
+
+                        ${variabel.join(", ")}
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <strong>Fungsi :</strong>
+
+                        f(${variabel.join(", ")})
+                        =
+                        ${fungsiInput}
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <strong>Jumlah Variabel :</strong>
+
+                        ${jumlahVariabel}
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <strong>Elemen Domain :</strong>
+
+                        {${domain
+                            .map(tampilTuple)
+                            .join(", ")}}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           STATUS
+        ============================================= */
+
+        let homomorfisma =
+            gagalJumlah === null &&
+            gagalKali === null;
+
+
+        let status = `
+
+            <div class="box">
+
+                <div class="status
+                    ${homomorfisma
+                        ? "status-hijau"
+                        : "status-merah"}">
+
+                    ${homomorfisma
+                        ? "HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           SYARAT
+        ============================================= */
+
+        let syarat = `
+
+            <div class="box">
+
+                <div class="section-title">
+
+                    Syarat Homomorfisma Ring
+
+                </div>
+
+
+                <div class="syarat">
+
+                    Misalkan:
+
+                    <br>
+
+                    f : R → S
+
+                    <br><br>
+
+                    Fungsi f disebut homomorfisma ring
+                    apabila memenuhi dua sifat utama:
+
+                    <br><br>
+
+
+                    <strong>1. Mempertahankan operasi penjumlahan</strong>
+
+                    <div class="formula">
+
+                        f(a + b) = f(a) + f(b)
+
+                    </div>
+
+
+                    untuk setiap
+                    a,b ∈ R.
+
+                    <br><br>
+
+
+                    <strong>2. Mempertahankan operasi perkalian</strong>
+
+                    <div class="formula">
+
+                        f(ab) = f(a)f(b)
+
+                    </div>
+
+
+                    untuk setiap
+                    a,b ∈ R.
+
+                    <br><br>
+
+                    Pada program ini, apabila domain memiliki
+                    lebih dari satu variabel, operasi dilakukan
+                    pada setiap komponen elemen domain.
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           PENJELASAN
+        ============================================= */
+
+        let penjelasan = `
+
+            <div class="box">
+
+                <div class="section-title">
+                    Penjelasan
+                </div>
+
+                <div class="penjelasan">
+
+        `;
+
+
+        /* =============================================
+           SYARAT 1
+        ============================================= */
+
+        penjelasan += `
+
+            <h4>
+                Syarat 1: Penjumlahan
+            </h4>
+
+        `;
+
+
+        if (gagalJumlah === null) {
+
+            penjelasan += `
+
+                Untuk seluruh elemen
+                a,b pada domain,
+                diperoleh:
+
+                <div class="formula">
+
+                    f(a+b) = f(a)+f(b)
+
+                </div>
+
+                Program telah memeriksa seluruh pasangan
+                elemen domain dan tidak menemukan
+                pelanggaran terhadap sifat penjumlahan.
+
+                <br><br>
+
+                Dengan demikian, sifat penjumlahan
+                <strong>terpenuhi</strong>.
+
+            `;
+
+        }
+
+        else {
+
+            penjelasan += `
+
+                Ambil contoh:
+
+                <br><br>
+
+                a = ${tampilTuple(gagalJumlah.a)}
+
+                <br>
+
+                b = ${tampilTuple(gagalJumlah.b)}
+
+                <br><br>
+
+                Penjumlahan kedua elemen:
+
+                <div class="formula">
+
+                    a+b =
+                    ${tampilTuple(gagalJumlah.aTambahB)}
+
+                </div>
+
+
+                Kemudian:
+
+                <br><br>
+
+                <strong>
+
+                f(a+b)
+                =
+                f(${tampilTuple(gagalJumlah.aTambahB)})
+                =
+                ${gagalJumlah.kiri}
+
+                </strong>
+
+                <br><br>
+
+                Sedangkan:
+
+                <br><br>
+
+                <strong>
+
+                f(a)+f(b)
+                =
+                ${gagalJumlah.fa}
+                +
+                ${gagalJumlah.fb}
+                =
+                ${gagalJumlah.kanan}
+
+                </strong>
+
+                <br><br>
+
+                Karena:
+
+                <div class="formula">
+
+                    ${gagalJumlah.kiri}
+                    ≠
+                    ${gagalJumlah.kanan}
+
+                </div>
+
+                maka:
+
+                <div class="formula">
+
+                    f(a+b) ≠ f(a)+f(b)
+
+                </div>
+
+                sehingga sifat penjumlahan
+                <strong>tidak terpenuhi</strong>.
+
+            `;
+
+        }
+
+
+        /* =============================================
+           SYARAT 2
+        ============================================= */
+
+        penjelasan += `
+
+            <h4>
+                Syarat 2: Perkalian
+            </h4>
+
+        `;
+
+
+        if (gagalKali === null) {
+
+            penjelasan += `
+
+                Untuk seluruh elemen
+                a,b pada domain,
+                diperoleh:
+
+                <div class="formula">
+
+                    f(ab) = f(a)f(b)
+
+                </div>
+
+                Program telah memeriksa seluruh pasangan
+                elemen domain dan tidak menemukan
+                pelanggaran terhadap sifat perkalian.
+
+                <br><br>
+
+                Dengan demikian, sifat perkalian
+                <strong>terpenuhi</strong>.
+
+            `;
+
+        }
+
+        else {
+
+            penjelasan += `
+
+                Ambil contoh:
+
+                <br><br>
+
+                a = ${tampilTuple(gagalKali.a)}
+
+                <br>
+
+                b = ${tampilTuple(gagalKali.b)}
+
+                <br><br>
+
+                Perkalian kedua elemen:
+
+                <div class="formula">
+
+                    ab =
+                    ${tampilTuple(gagalKali.aKaliB)}
+
+                </div>
+
+
+                Kemudian:
+
+                <br><br>
+
+                <strong>
+
+                f(ab)
+                =
+                f(${tampilTuple(gagalKali.aKaliB)})
+                =
+                ${gagalKali.kiri}
+
+                </strong>
+
+                <br><br>
+
+                Sedangkan:
+
+                <br><br>
+
+                <strong>
+
+                f(a)f(b)
+                =
+                ${gagalKali.fa}
+                ×
+                ${gagalKali.fb}
+                =
+                ${gagalKali.kanan}
+
+                </strong>
+
+                <br><br>
+
+                Karena:
+
+                <div class="formula">
+
+                    ${gagalKali.kiri}
+                    ≠
+                    ${gagalKali.kanan}
+
+                </div>
+
+                maka:
+
+                <div class="formula">
+
+                    f(ab) ≠ f(a)f(b)
+
+                </div>
+
+                sehingga sifat perkalian
+                <strong>tidak terpenuhi</strong>.
+
+            `;
+
+        }
+
+
+        penjelasan += `
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           KESIMPULAN
+        ============================================= */
+
+        let kesimpulan = `
+
+            <div class="box">
+
+                <div class="kesimpulan
+                    ${homomorfisma
+                        ? "hijau"
+                        : "merah"}">
+
+                    ${homomorfisma
+                        ? "MERUPAKAN HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           TABEL PEMETAAN
+        ============================================= */
+
+        let tabelPemetaan = `
+
+            <div class="box">
+
+                <div class="section-title">
+                    Tabel Pemetaan
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Elemen Domain
+                                </th>
+
+                                <th>
+                                    Fungsi f
+                                </th>
+
+                                <th>
+                                    Daerah Hasil
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+        `;
+
+
+        for (let elemen of domain) {
+
+            tabelPemetaan += `
+
+                <tr>
+
+                    <td>
+                        ${tampilTuple(elemen)}
+                    </td>
+
+                    <td>
+                        f(${tampilTuple(elemen)})
+                    </td>
+
+                    <td>
+                        ${f(elemen)}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+
+        tabelPemetaan += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           IMAGE
+        ============================================= */
+
+        let imageSet = new Set();
+
+        for (let elemen of domain) {
+
+            imageSet.add(f(elemen));
+
+        }
+
+
+        let imageArray =
+            Array.from(imageSet)
+            .sort((a,b) => a-b);
+
+
+        let imageTable = `
+
+            <div class="box">
+
+                <div class="section-title">
+                    Image
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Elemen Domain
+                                </th>
+
+                                <th>
+                                    Fungsi f
+                                </th>
+
+                                <th>
+                                    Daerah Hasil
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+        `;
+
+
+        for (let elemen of domain) {
+
+            let nilai =
+                f(elemen);
+
+
+            if (imageArray.includes(nilai)) {
+
+                imageTable += `
+
+                    <tr>
+
+                        <td>
+                            ${tampilTuple(elemen)}
+                        </td>
+
+                        <td>
+                            f(${tampilTuple(elemen)})
+                        </td>
+
+                        <td>
+                            ${nilai}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+
+        imageTable += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <br>
+
+                <strong>
+
+                    Image(f) =
+                    {${imageArray.join(", ")}}
+
+                </strong>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           KERNEL
+        ============================================= */
+
+        let kernel = [];
+
+        for (let elemen of domain) {
+
+            if (f(elemen) === 0) {
+
+                kernel.push(elemen);
+
+            }
+
+        }
+
+
+        let kernelTable = `
+
+            <div class="box">
+
+                <div class="section-title">
+                    Kernel
+                </div>
+
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Elemen Domain
+                                </th>
+
+                                <th>
+                                    Fungsi f
+                                </th>
+
+                                <th>
+                                    Daerah Hasil
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+        `;
+
+
+        if (kernel.length === 0) {
+
+            kernelTable += `
+
+                <tr>
+
+                    <td colspan="3">
+
+                        Tidak terdapat elemen
+                        yang termasuk kernel.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+
+        else {
+
+            for (let elemen of kernel) {
+
+                kernelTable += `
+
+                    <tr>
+
+                        <td>
+                            ${tampilTuple(elemen)}
+                        </td>
+
+                        <td>
+                            f(${tampilTuple(elemen)})
+                        </td>
+
+                        <td>
+                            0
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+
+        }
+
+
+        kernelTable += `
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <br>
+
+                <strong>
+
+                    Ker(f) =
+                    {
+                    ${kernel
+                        .map(tampilTuple)
+                        .join(", ")}
+                    }
+
+                </strong>
+
+            </div>
+
+        `;
+
+
+        /* =============================================
+           TAMPILKAN SEMUA HASIL
+        ============================================= */
+
+        hasil.innerHTML =
+
+            informasi +
+
+            status +
+
+            syarat +
+
+            penjelasan +
+
+            kesimpulan +
+
+            tabelPemetaan +
+
+            imageTable +
+
+            kernelTable;
+
+
+    }
+
+    catch (error) {
+
+        hasil.innerHTML = `
+
+            <div class="box">
+
+                <div class="status status-merah">
+
+                    <strong>Error:</strong>
+
+                    <br><br>
+
+                    ${error.message}
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
