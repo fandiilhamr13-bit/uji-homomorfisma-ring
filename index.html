@@ -52,6 +52,40 @@
             border: 2px solid #7fb8e8;
         }
 
+        .header {
+            position: relative;
+        }
+
+        .header-logo {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid #7fb8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            line-height: 1;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        .header-logo .logo-main {
+            font-size: 21px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .header-logo .logo-sub {
+            margin-top: 4px;
+            font-size: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
         .header h1 {
             margin: 0;
             font-size: 34px;
@@ -132,6 +166,28 @@
         /* =========================
            FORM
         ========================= */
+/* Pilihan Jenis Ring */
+.ring-select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #b8c0c8;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #757575;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    cursor: pointer;
+    outline: none;
+}
+
+.ring-select:focus {
+    border-color: #222;
+}
+
+.form-grid:first-child {
+    margin-bottom: 20px;
+}
 
         .form-grid {
             display: grid;
@@ -447,12 +503,17 @@
 
 <div class="header">
 
+    <div class="header-logo" aria-label="Logo Homomorfisma Ring">
+        <div class="logo-main">f</div>
+        <div class="logo-sub">R → R′</div>
+    </div>
+
     <h1>
-        Uji Homomorfisma Ring
+        UJI HOMOMORFISMA RING
     </h1>
 
     <p>
-        Pengujian Fungsi Pada Ring Bilangan Bulat Modulo
+        Pengujian Fungsi Pada Ring Jenis Bilangan
     </p>
 
 </div>
@@ -473,16 +534,18 @@
                 Petujuk Peggunaan:
             </h3>
 
-            1. Masukkan nilai Ring Domain <strong>Z<sub>n</sub></strong>.<br>
+            1. Tentukan jenis Ring Domain dan Ring Kodomain.<br>
 
-            2. Masukkan nilai Ring Kodomain <strong>Z<sub>m</sub></strong>.<br>
+            2. Masukkan nilai Ring Domain apabila Ring <strong>Z<sub>n</sub></strong>.<br>
 
-            3. Masukkan variabel (Contoh: x, a, u).<br>
+            3. Masukkan nilai Ring Kodomain apabila Ring <strong>Z<sub>m</sub></strong>.<br>
 
-            4. Pisahkan beberapa variabel dengan tanda koma apabila lebih dari satu
+            4. Masukkan variabel (Contoh: x, a, u), apabila Ring Kompleks variabel adalah z.<br>
+
+            5. Pisahkan beberapa variabel dengan tanda koma apabila lebih dari satu
             (Contoh: x,y).<br>
 
-            5. Masukkan fungsi menggunakan variabel yang telah diinput
+            6. Masukkan fungsi menggunakan variabel yang telah diinput
             (Contoh: 10*x, y+5, u+v).
 
         </div>
@@ -495,6 +558,34 @@
     ========================= -->
 
     <div class="box">
+
+        <div class="form-grid ring-choice">
+
+                <div class="form-group">
+                    <label for="jenisDomain">Ring Domain</label>
+                    <select id="jenisDomain" class="ring-select">
+                        <option value="" selected disabled>Masukkan Jenis Ring</option>
+                        <option value="Zn">ℤₙ</option>
+                        <option value="Z">ℤ</option>
+                        <option value="Q">ℚ</option>
+                        <option value="R">ℝ</option>
+                        <option value="C">ℂ</option>        
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="jenisKodomain">Ring Kodomain</label>
+                    <select id="jenisKodomain" class="ring-select">
+                        <option value="" selected disabled>Masukkan Jenis Ring</option>
+                        <option value="Zm">ℤₘ</option>
+                        <option value="Z">ℤ</option>
+                        <option value="Q">ℚ</option>
+                        <option value="R">ℝ</option>
+                        <option value="C">ℂ</option>
+                    </select>
+                </div>
+
+            </div>
 
         <div class="form-grid">
 
@@ -585,6 +676,72 @@
 
 <script>
 
+// ============================================================
+// LOGIKA PEMILIHAN JENIS RING
+// TAHAP 2 - MENYESUAIKAN TAMPILAN INPUT
+// ============================================================
+
+const jenisDomain = document.getElementById("jenisDomain");
+const jenisKodomain = document.getElementById("jenisKodomain");
+
+const inputN = document.getElementById("n");
+const inputM = document.getElementById("m");
+
+
+// Ambil kotak/form tempat input n berada
+const groupN = inputN.closest(".form-group");
+
+// Ambil kotak/form tempat input m berada
+const groupM = inputM.closest(".form-group");
+
+
+// Fungsi mengatur tampilan input
+function sesuaikanFormRing() {
+
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+
+    // ==========================================
+    // RING DOMAIN
+    // ==========================================
+
+    if (domain === "Zn") {
+
+        // Tampilkan kembali seluruh kotak n
+        groupN.style.display = "";
+
+    } else {
+
+        // Sembunyikan seluruh kotak n
+        groupN.style.display = "none";
+    }
+
+
+    // ==========================================
+    // RING KODOMAIN
+    // ==========================================
+
+    if (kodomain === "Zm") {
+
+        // Tampilkan kembali seluruh kotak m
+        groupM.style.display = "";
+
+    } else {
+
+        // Sembunyikan seluruh kotak m
+        groupM.style.display = "none";
+    }
+}
+
+
+// Jalankan ketika Domain berubah
+jenisDomain.addEventListener("change", sesuaikanFormRing);
+
+
+// Jalankan ketika Kodomain berubah
+jenisKodomain.addEventListener("change", sesuaikanFormRing);
+
 
 /* =====================================================
    FUNGSI MODULO
@@ -595,6 +752,3148 @@ function modulo(a, m) {
     return ((a % m) + m) % m;
 
 }
+
+// ============================================================
+// TAHAP 3 - LOGIKA RING Z → Z
+// ============================================================
+
+// Tombol UJI HOMOMORFISMA yang sudah ada
+const tombolUjiRing = document.querySelector(
+    'button[onclick="ujiHomomorfisma()"]'
+);
+
+// Simpan fungsi lama agar pengujian Z_n → Z_m tetap menggunakan
+// seluruh logika modulo yang sudah ada.
+const fungsiUjiLama = tombolUjiRing.onclick;
+
+
+// ============================================================
+// EVALUASI FUNGSI UNTUK RING Z
+// ============================================================
+
+function buatFungsiZZ(variabelInput, fungsiInput) {
+
+    const variabel = variabelInput
+        .split(",")
+        .map(v => v.trim())
+        .filter(v => v !== "");
+
+    if (variabel.length === 0) {
+        throw new Error("Variabel belum dimasukkan.");
+    }
+
+    if (variabel.length !== 1) {
+        throw new Error("Untuk Z → Z, masukkan tepat satu variabel.");
+    }
+
+    if (fungsiInput.trim() === "") {
+        throw new Error("Fungsi belum dimasukkan.");
+    }
+
+    let fungsiJS = fungsiInput
+        .replace(/²/g, "**2")
+        .replace(/³/g, "**3")
+        .replace(/\^/g, "**");
+
+    // Membuat fungsi JavaScript
+    const fungsi = new Function(
+        ...variabel,
+        `"use strict"; return (${fungsiJS});`
+    );
+
+    return function (...nilai) {
+
+        const hasil = fungsi(...nilai);
+
+        if (typeof hasil !== "number" || !Number.isFinite(hasil)) {
+            throw new Error(
+                "Fungsi menghasilkan nilai yang bukan bilangan real hingga."
+            );
+        }
+
+        // Kodomain Z mengharuskan hasil fungsi berupa bilangan bulat.
+        if (!Number.isInteger(hasil)) {
+            throw new Error(
+                "Fungsi tidak memetakan elemen ke ℤ karena terdapat hasil yang bukan bilangan bulat."
+            );
+        }
+
+        return hasil;
+    };
+}
+
+
+// ============================================================
+// MEMBUAT BARIS TABEL PEMETAAN Z → Z
+// ============================================================
+
+function buatTabelPemetaanZZ(f, contoh) {
+
+    let html = `
+        <div class="box">
+            <div class="section-title">Pemetaan</div>
+
+            <p>
+                Berikut beberapa contoh pemetaan elemen dari domain ℤ
+                ke kodomain ℤ berdasarkan fungsi yang dimasukkan.
+            </p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elemen Domain</th>
+                            <th>Fungsi f</th>
+                            <th>Daerah Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    for (const x of contoh) {
+        html += `
+            <tr>
+                <td>${x}</td>
+                <td>f(${x})</td>
+                <td>${f(x)}</td>
+            </tr>
+        `;
+    }
+
+    html += `
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="margin-top:15px;">
+                <strong>Catatan:</strong> tabel ini menampilkan contoh pemetaan
+                dari elemen-elemen yang digunakan dalam pengujian.
+            </p>
+        </div>
+    `;
+
+    return html;
+}
+
+
+// ============================================================
+// IMAGE Z → Z
+// ============================================================
+
+function buatImageZZ(f, contoh) {
+
+    const imageSet = new Set();
+
+    for (const x of contoh) {
+        imageSet.add(f(x));
+    }
+
+    const imageArray = Array.from(imageSet).sort((a, b) => a - b);
+
+    let html = `
+        <div class="box">
+            <div class="section-title">Image</div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elemen Domain</th>
+                            <th>Fungsi f</th>
+                            <th>Daerah Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    for (const x of contoh) {
+        html += `
+            <tr>
+                <td>${x}</td>
+                <td>f(${x})</td>
+                <td>${f(x)}</td>
+            </tr>
+        `;
+    }
+
+    html += `
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <strong>Image(f) = {${imageArray.join(", ")}}</strong>
+
+            <p style="margin-top:15px;">
+                <strong>Catatan:</strong> karena ℤ merupakan himpunan tak hingga,
+                daftar di atas adalah image yang diperoleh dari rentang contoh
+                pengujian, bukan daftar seluruh image secara simbolik.
+            </p>
+        </div>
+    `;
+
+    return html;
+}
+
+
+// ============================================================
+// KERNEL Z → Z
+// ============================================================
+
+function buatKernelZZ(f, contoh) {
+
+    const kernel = contoh.filter(x => f(x) === 0);
+
+    let html = `
+        <div class="box">
+            <div class="section-title">Kernel</div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Elemen Domain</th>
+                            <th>Fungsi f</th>
+                            <th>Daerah Hasil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    `;
+
+    if (kernel.length === 0) {
+        html += `
+            <tr>
+                <td colspan="3">Tidak terdapat elemen kernel pada contoh pengujian.</td>
+            </tr>
+        `;
+    } else {
+        for (const x of kernel) {
+            html += `
+                <tr>
+                    <td>${x}</td>
+                    <td>f(${x})</td>
+                    <td>0</td>
+                </tr>
+            `;
+        }
+    }
+
+    html += `
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <strong>Ker(f) = {${kernel.join(", ")}}</strong>
+
+            <p style="margin-top:15px;">
+                <strong>Catatan:</strong> kernel yang ditampilkan berasal dari
+                elemen-elemen yang diperiksa pada rentang contoh pengujian.
+            </p>
+        </div>
+    `;
+
+    return html;
+}
+
+
+// ============================================================
+// UJI HOMOMORFISMA Z → Z
+// ============================================================
+
+function ujiZZ() {
+
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+    // Pastikan hanya digunakan untuk Z → Z
+    if (domain !== "Z" || kodomain !== "Z") {
+        fungsiUjiLama.call(tombolUjiRing);
+        return;
+    }
+
+    const variabelInput = document.getElementById("variabel").value.trim();
+    const fungsiInput = document.getElementById("fungsi").value.trim();
+    const hasil = document.getElementById("hasil");
+
+    // Validasi
+    if (variabelInput === "") {
+        alert("Masukkan variabel terlebih dahulu.");
+        return;
+    }
+
+    if (fungsiInput === "") {
+        alert("Masukkan fungsi terlebih dahulu.");
+        return;
+    }
+
+    try {
+
+        const f = buatFungsiZZ(variabelInput, fungsiInput);
+
+        // Rentang contoh untuk pemetaan, image, kernel,
+        // dan pengujian sifat operasi.
+        const contoh = [-5, -3, -2, -1, 0, 1, 2, 3, 5];
+
+        let memenuhiPenjumlahan = true;
+        let memenuhiPerkalian = true;
+
+        let contohPenjumlahan = null;
+        let contohPerkalian = null;
+
+        // ====================================================
+        // UJI PENJUMLAHAN
+        // ====================================================
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const fab = f(a + b);
+                const fa_fb = f(a) + f(b);
+
+                if (fab !== fa_fb) {
+                    memenuhiPenjumlahan = false;
+
+                    contohPenjumlahan = {
+                        a: a,
+                        b: b,
+                        kiri: fab,
+                        kanan: fa_fb
+                    };
+
+                    break;
+                }
+            }
+
+            if (!memenuhiPenjumlahan) break;
+        }
+
+        // ====================================================
+        // UJI PERKALIAN
+        // ====================================================
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const fab = f(a * b);
+                const fa_fb = f(a) * f(b);
+
+                if (fab !== fa_fb) {
+                    memenuhiPerkalian = false;
+
+                    contohPerkalian = {
+                        a: a,
+                        b: b,
+                        kiri: fab,
+                        kanan: fa_fb
+                    };
+
+                    break;
+                }
+            }
+
+            if (!memenuhiPerkalian) break;
+        }
+
+        const hasilHomomorfisma =
+            memenuhiPenjumlahan && memenuhiPerkalian;
+
+        // ====================================================
+        // INFORMASI FUNGSI
+        // ====================================================
+
+        let informasi = `
+            <div class="box">
+                <div class="section-title">Informasi Fungsi</div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Ring Domain :</strong> ℤ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Ring Kodomain :</strong> ℤ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi Pemetaan :</strong>
+                        f : ℤ → ℤ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Elemen Domain :</strong>
+                        Tak hingga
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Variabel :</strong>
+                        ${variabelInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi :</strong>
+                        f(${variabelInput}) = ${fungsiInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Variabel :</strong>
+                        1
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Contoh Elemen Domain :</strong>
+                        {${contoh.join(", ")}}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // STATUS
+        // ====================================================
+
+        let status = `
+            <div class="box">
+                <div class="section-title">Status</div>
+                <div class="status ${hasilHomomorfisma ? "status-hijau" : "status-merah"}">
+                    ${hasilHomomorfisma
+                        ? "✓ MERUPAKAN HOMOMORFISMA RING"
+                        : "✗ BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // SYARAT HOMOMORFISMA
+        // ====================================================
+
+        let syarat = `
+            <div class="box">
+                <div class="section-title">Syarat Homomorfisma Ring</div>
+
+                <div class="syarat">
+                    <p>
+                        <strong>1. Mempertahankan penjumlahan:</strong><br>
+                        f(a + b) = f(a) + f(b)
+                        &nbsp;&nbsp;
+                        ${memenuhiPenjumlahan ? "✓ Terpenuhi" : "✗ Tidak terpenuhi"}
+                    </p>
+
+                    <p>
+                        <strong>2. Mempertahankan perkalian:</strong><br>
+                        f(ab) = f(a)f(b)
+                        &nbsp;&nbsp;
+                        ${memenuhiPerkalian ? "✓ Terpenuhi" : "✗ Tidak terpenuhi"}
+                    </p>
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // PENJELASAN
+        // ====================================================
+
+        let penjelasan = `
+            <div class="box">
+                <div class="section-title">Penjelasan</div>
+
+                <p>
+                    Untuk menentukan apakah fungsi
+                    <strong>f : ℤ → ℤ</strong> merupakan homomorfisma ring,
+                    diperiksa dua sifat utama, yaitu mempertahankan operasi
+                    penjumlahan dan mempertahankan operasi perkalian.
+                </p>
+
+                <h4>1. Mempertahankan Operasi Penjumlahan</h4>
+
+                <p>
+                    Syarat pertama homomorfisma ring adalah:
+                </p>
+
+                <div class="formula">
+                    f(a + b) = f(a) + f(b)
+                </div>
+
+                <p>
+                    Artinya, kita mengambil dua elemen <strong>a</strong> dan
+                    <strong>b</strong> dari ring domain ℤ, kemudian membandingkan
+                    hasil fungsi dari penjumlahan keduanya dengan penjumlahan
+                    hasil fungsi masing-masing elemen.
+                </p>
+
+                <p>
+                    Sebagai contoh, kita ambil dua elemen dari domain:
+                </p>
+
+                <div class="formula">
+                    a = ${memenuhiPenjumlahan ? contoh[0] : contohPenjumlahan.a}
+                    &nbsp;&nbsp;&nbsp;
+                    b = ${memenuhiPenjumlahan ? contoh[1] : contohPenjumlahan.b}
+                </div>
+        `;
+
+        const aJumlah = memenuhiPenjumlahan ? contoh[0] : contohPenjumlahan.a;
+        const bJumlah = memenuhiPenjumlahan ? contoh[1] : contohPenjumlahan.b;
+        const aJumlahB = aJumlah + bJumlah;
+        const fAJumlahB = f(aJumlahB);
+        const fAJumlah = f(aJumlah);
+        const fBJumlah = f(bJumlah);
+        const fAJumlahTambahFB = fAJumlah + fBJumlah;
+
+        penjelasan += `
+                <p>
+                    Selanjutnya, kita hitung penjumlahan kedua elemen di dalam
+                    ring domain ℤ. Diperoleh:
+                </p>
+
+                <div class="formula">
+                    a + b = ${aJumlah} + ${bJumlah} = ${aJumlahB}
+                </div>
+
+                <p>
+                    Jadi, hasil penjumlahan kedua elemen di domain adalah:
+                </p>
+
+                <div class="formula">
+                    a + b = ${aJumlahB}
+                </div>
+
+                <p>
+                    Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+                    Diperoleh:
+                </p>
+
+                <div class="formula">
+                    f(a + b) = f(${aJumlahB}) = ${fAJumlahB}
+                </div>
+
+                <p>
+                    Selanjutnya, kita hitung bagian sebelah kanan,
+                    yaitu <strong>f(a) + f(b)</strong>.
+                </p>
+
+                <div class="formula">
+                    f(a) = f(${aJumlah}) = ${fAJumlah}
+                </div>
+
+                <div class="formula">
+                    f(b) = f(${bJumlah}) = ${fBJumlah}
+                </div>
+
+                <p>
+                    Kemudian kedua hasil tersebut dijumlahkan pada ring kodomain ℤ:
+                </p>
+
+                <div class="formula">
+                    f(a) + f(b) = ${fAJumlah} + ${fBJumlah} = ${fAJumlahTambahFB}
+                </div>
+
+                <p>
+                    Dengan demikian, kita memperoleh:
+                </p>
+
+                <div class="formula">
+                    f(a + b) = ${fAJumlahB}
+                </div>
+
+                <div class="formula">
+                    f(a) + f(b) = ${fAJumlahTambahFB}
+                </div>
+        `;
+
+        if (memenuhiPenjumlahan) {
+            penjelasan += `
+                <p>
+                    Karena kedua hasil tersebut sama, maka untuk contoh yang
+                    dipilih diperoleh:
+                </p>
+
+                <div class="formula">
+                    ${fAJumlahB} = ${fAJumlahTambahFB}
+                </div>
+
+                <p>
+                    Sama seperti pada pengujian ring modulo, satu contoh belum
+                    cukup untuk menyatakan bahwa fungsi merupakan homomorfisma.
+                    Oleh karena itu, program memeriksa seluruh pasangan elemen
+                    pada contoh pengujian.
+                </p>
+
+                <p>
+                    Setelah seluruh pasangan elemen diperiksa, tidak ditemukan
+                    pasangan yang melanggar persamaan:
+                </p>
+
+                <div class="formula">
+                    f(a + b) = f(a) + f(b)
+                </div>
+
+                <p>
+                    Dengan demikian, fungsi <strong>mempertahankan operasi
+                    penjumlahan</strong> pada seluruh pasangan yang diperiksa.
+                </p>
+            `;
+        } else {
+            penjelasan += `
+                <p>
+                    Karena:
+                </p>
+
+                <div class="formula">
+                    ${fAJumlahB} ≠ ${fAJumlahTambahFB}
+                </div>
+
+                <p>
+                    maka:
+                </p>
+
+                <div class="formula">
+                    f(a + b) ≠ f(a) + f(b)
+                </div>
+
+                <p>
+                    Artinya, ditemukan pasangan elemen
+                    <strong>a = ${aJumlah}</strong> dan
+                    <strong>b = ${bJumlah}</strong> yang tidak memenuhi sifat
+                    mempertahankan operasi penjumlahan.
+                </p>
+
+                <p>
+                    Karena cukup ditemukan satu pasangan elemen yang melanggar
+                    sifat tersebut, maka fungsi <strong>tidak mempertahankan
+                    operasi penjumlahan</strong>. Dengan demikian, syarat pertama
+                    homomorfisma ring <strong>tidak terpenuhi</strong>.
+                </p>
+            `;
+        }
+
+        // ----------------------------------------------------
+        // PENJELASAN PERKALIAN
+        // ----------------------------------------------------
+
+        const aKali = memenuhiPerkalian ? contoh[0] : contohPerkalian.a;
+        const bKali = memenuhiPerkalian ? contoh[1] : contohPerkalian.b;
+        const aKaliB = aKali * bKali;
+        const fAKaliB = f(aKaliB);
+        const fAKali = f(aKali);
+        const fBKali = f(bKali);
+        const fAKaliKaliFB = fAKali * fBKali;
+
+        penjelasan += `
+                <h4>2. Mempertahankan Operasi Perkalian</h4>
+
+                <p>
+                    Syarat kedua homomorfisma ring adalah:
+                </p>
+
+                <div class="formula">
+                    f(ab) = f(a)f(b)
+                </div>
+
+                <p>
+                    Artinya, kita mengambil dua elemen <strong>a</strong> dan
+                    <strong>b</strong> dari ring domain, kemudian membandingkan
+                    hasil fungsi dari perkalian keduanya dengan perkalian hasil
+                    fungsi masing-masing elemen.
+                </p>
+
+                <p>
+                    Sebagai contoh, kita ambil dua elemen dari domain:
+                </p>
+
+                <div class="formula">
+                    a = ${aKali}
+                    &nbsp;&nbsp;&nbsp;
+                    b = ${bKali}
+                </div>
+
+                <p>
+                    Selanjutnya, kita hitung perkalian kedua elemen di dalam
+                    ring domain ℤ. Diperoleh:
+                </p>
+
+                <div class="formula">
+                    ab = ${aKali} × ${bKali} = ${aKaliB}
+                </div>
+
+                <p>
+                    Jadi, hasil perkalian kedua elemen di domain adalah:
+                </p>
+
+                <div class="formula">
+                    ab = ${aKaliB}
+                </div>
+
+                <p>
+                    Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+                    Diperoleh:
+                </p>
+
+                <div class="formula">
+                    f(ab) = f(${aKaliB}) = ${fAKaliB}
+                </div>
+
+                <p>
+                    Selanjutnya, kita hitung bagian sebelah kanan,
+                    yaitu <strong>f(a)f(b)</strong>.
+                </p>
+
+                <div class="formula">
+                    f(a) = f(${aKali}) = ${fAKali}
+                </div>
+
+                <div class="formula">
+                    f(b) = f(${bKali}) = ${fBKali}
+                </div>
+
+                <p>
+                    Kemudian kedua hasil tersebut dikalikan pada ring kodomain ℤ:
+                </p>
+
+                <div class="formula">
+                    f(a)f(b) = ${fAKali} × ${fBKali} = ${fAKaliKaliFB}
+                </div>
+
+                <p>
+                    Dengan demikian, kita memperoleh:
+                </p>
+
+                <div class="formula">
+                    f(ab) = ${fAKaliB}
+                </div>
+
+                <div class="formula">
+                    f(a)f(b) = ${fAKaliKaliFB}
+                </div>
+        `;
+
+        if (memenuhiPerkalian) {
+            penjelasan += `
+                <p>
+                    Karena kedua hasil tersebut sama, maka untuk contoh yang
+                    dipilih diperoleh:
+                </p>
+
+                <div class="formula">
+                    ${fAKaliB} = ${fAKaliKaliFB}
+                </div>
+
+                <p>
+                    Setelah seluruh pasangan elemen pada contoh pengujian
+                    diperiksa, tidak ditemukan pasangan yang melanggar
+                    persamaan:
+                </p>
+
+                <div class="formula">
+                    f(ab) = f(a)f(b)
+                </div>
+
+                <p>
+                    Dengan demikian, fungsi <strong>mempertahankan operasi
+                    perkalian</strong> pada seluruh pasangan yang diperiksa.
+                </p>
+            `;
+        } else {
+            penjelasan += `
+                <p>
+                    Karena:
+                </p>
+
+                <div class="formula">
+                    ${fAKaliB} ≠ ${fAKaliKaliFB}
+                </div>
+
+                <p>
+                    maka:
+                </p>
+
+                <div class="formula">
+                    f(ab) ≠ f(a)f(b)
+                </div>
+
+                <p>
+                    Artinya, ditemukan pasangan elemen
+                    <strong>a = ${aKali}</strong> dan
+                    <strong>b = ${bKali}</strong> yang tidak memenuhi sifat
+                    mempertahankan operasi perkalian.
+                </p>
+
+                <p>
+                    Karena cukup ditemukan satu pasangan elemen yang melanggar
+                    sifat tersebut, maka fungsi <strong>tidak mempertahankan
+                    operasi perkalian</strong>. Dengan demikian, syarat kedua
+                    homomorfisma ring <strong>tidak terpenuhi</strong>.
+                </p>
+            `;
+        }
+
+        penjelasan += `
+                <h4>Kesimpulan Pemeriksaan</h4>
+
+                <p>
+                    Berdasarkan pemeriksaan yang telah dilakukan, sifat
+                    penjumlahan dan sifat perkalian ${hasilHomomorfisma
+                        ? "keduanya terpenuhi"
+                        : "tidak keduanya terpenuhi"}.
+                </p>
+
+                <div class="formula">
+                    f(a + b) = f(a) + f(b)
+                </div>
+
+                <div class="formula">
+                    f(ab) = f(a)f(b)
+                </div>
+
+                <p>
+                    Oleh karena itu, fungsi
+                    <strong>f : ℤ → ℤ</strong>
+                    ${hasilHomomorfisma
+                        ? "memenuhi kedua syarat tersebut pada seluruh pasangan contoh yang diperiksa."
+                        : "tidak memenuhi setidaknya salah satu syarat tersebut."}
+                </p>
+
+                <p>
+                    <strong>Catatan:</strong> karena ℤ merupakan ring tak hingga,
+                    pemeriksaan numerik pada contoh yang dipilih dapat menemukan
+                    pelanggaran jika ada, tetapi tidak dapat menggantikan
+                    pembuktian formal untuk seluruh elemen ℤ.
+                </p>
+            </div>
+        `;
+
+        // ====================================================
+        // KESIMPULAN
+        // ====================================================
+
+        let kesimpulan = `
+            <div class="box">
+                <div class="kesimpulan ${hasilHomomorfisma ? "hijau" : "merah"}">
+                    ${hasilHomomorfisma
+                        ? "MERUPAKAN HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // PEMETAAN, IMAGE, KERNEL
+        // ====================================================
+
+        const tabelPemetaan = buatTabelPemetaanZZ(f, contoh);
+        const imageTable = buatImageZZ(f, contoh);
+        const kernelTable = buatKernelZZ(f, contoh);
+
+        // ====================================================
+        // TAMPILKAN SEMUA HASIL
+        // ====================================================
+
+        hasil.innerHTML =
+            informasi +
+            status +
+            syarat +
+            penjelasan +
+            kesimpulan +
+            tabelPemetaan +
+            imageTable +
+            kernelTable;
+
+    } catch (error) {
+
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    <strong>Error:</strong>
+                    <br><br>
+                    ${error.message}
+                </div>
+            </div>
+        `;
+    }
+}
+
+
+// ============================================================
+// TAHAP 4 - LOGIKA RING Q → Q
+// ============================================================
+
+function buatFungsiQQ(variabelInput, fungsiInput) {
+    const variabel = variabelInput.split(",").map(v => v.trim()).filter(v => v !== "");
+    if (variabel.length === 0) throw new Error("Variabel belum dimasukkan.");
+    if (variabel.length > 1) throw new Error("Untuk ℚ → ℚ, masukkan satu variabel saja.");
+    if (fungsiInput.trim() === "") throw new Error("Fungsi belum dimasukkan.");
+
+    for (const v of variabel) {
+        if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(v)) {
+            throw new Error("Nama variabel '" + v + "' tidak valid.");
+        }
+    }
+
+    const fungsiJS = fungsiInput.replace(/²/g, "**2").replace(/³/g, "**3").replace(/\^/g, "**");
+    let fungsi;
+    try {
+        fungsi = new Function(...variabel, `"use strict"; return (${fungsiJS});`);
+    } catch (error) {
+        throw new Error("Penulisan fungsi tidak valid.");
+    }
+
+    return function (...nilai) {
+        let hasil;
+        try { hasil = fungsi(...nilai); }
+        catch (error) { throw new Error("Fungsi tidak dapat dihitung."); }
+        if (typeof hasil !== "number" || !Number.isFinite(hasil)) {
+            throw new Error("Fungsi menghasilkan nilai yang tidak valid.");
+        }
+        return hasil;
+    };
+}
+
+function samaQQ(a, b) {
+    const toleransi = 1e-10;
+    return Math.abs(a - b) <= toleransi * Math.max(1, Math.abs(a), Math.abs(b));
+}
+
+function formatQQ(nilai) {
+    if (Math.abs(nilai) < 1e-12) return "0";
+
+    // Mengubah hasil desimal menjadi pecahan rasional sederhana
+    // dengan pendekatan pecahan berpenyebut kecil.
+    const sign = nilai < 0 ? -1 : 1;
+    let x = Math.abs(nilai);
+    const batasPenyebut = 1000000;
+
+    let a0 = Math.floor(x);
+    let p0 = 1, q0 = 0;
+    let p1 = a0, q1 = 1;
+
+    let sisa = x - a0;
+    let iterasi = 0;
+
+    while (sisa > 1e-12 && iterasi < 30) {
+        x = 1 / sisa;
+        const a = Math.floor(x);
+        const p2 = a * p1 + p0;
+        const q2 = a * q1 + q0;
+
+        if (q2 > batasPenyebut) break;
+
+        p0 = p1;
+        q0 = q1;
+        p1 = p2;
+        q1 = q2;
+
+        sisa = x - a;
+        iterasi++;
+    }
+
+    const pembilang = sign * p1;
+    const penyebut = q1;
+
+    const fpb = (a, b) => {
+        a = Math.abs(a);
+        b = Math.abs(b);
+        while (b !== 0) {
+            const sisa = a % b;
+            a = b;
+            b = sisa;
+        }
+        return a || 1;
+    };
+
+    const pembagi = fpb(pembilang, penyebut);
+    const p = pembilang / pembagi;
+    const q = penyebut / pembagi;
+
+    // Jika pendekatan pecahan terlalu jauh dari nilai asli,
+    // tampilkan bentuk desimalnya.
+    if (Math.abs(nilai - p / q) > 1e-9) {
+        return Number(nilai.toFixed(10)).toString();
+    }
+
+    return q === 1 ? String(p) : `${p}/${q}`;
+}
+
+function ujiQQ() {
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+    if (domain !== "Q" || kodomain !== "Q") {
+        fungsiUjiLama.call(tombolUjiRing);
+        return;
+    }
+
+    const variabelInput = document.getElementById("variabel").value.trim();
+    const fungsiInput = document.getElementById("fungsi").value.trim();
+    const hasil = document.getElementById("hasil");
+
+    if (variabelInput === "") { alert("Masukkan variabel terlebih dahulu."); return; }
+    if (fungsiInput === "") { alert("Masukkan fungsi terlebih dahulu."); return; }
+
+    try {
+        const f = buatFungsiQQ(variabelInput, fungsiInput);
+        const contoh = [-2, -1, -0.5, 0, 0.5, 1, 2];
+        let memenuhiPenjumlahan = true;
+        let memenuhiPerkalian = true;
+        let contohPenjumlahan = null;
+        let contohPerkalian = null;
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+                const kiri = f(a + b), kanan = f(a) + f(b);
+                if (!samaQQ(kiri, kanan)) {
+                    memenuhiPenjumlahan = false;
+                    contohPenjumlahan = { a, b, kiri, kanan };
+                    break;
+                }
+            }
+            if (!memenuhiPenjumlahan) break;
+        }
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+                const kiri = f(a * b), kanan = f(a) * f(b);
+                if (!samaQQ(kiri, kanan)) {
+                    memenuhiPerkalian = false;
+                    contohPerkalian = { a, b, kiri, kanan };
+                    break;
+                }
+            }
+            if (!memenuhiPerkalian) break;
+        }
+
+        const homomorfisma = memenuhiPenjumlahan && memenuhiPerkalian;
+        const contohJumlah = contohPenjumlahan || { a: -2, b: -1 };
+        const contohKali = contohPerkalian || { a: -2, b: -1 };
+
+        const aJumlah = contohJumlah.a, bJumlah = contohJumlah.b;
+        const aTambahB = aJumlah + bJumlah;
+        const fAJumlah = f(aJumlah), fBJumlah = f(bJumlah);
+        const fATambahB = f(aTambahB), fAJumlahTambahFB = fAJumlah + fBJumlah;
+
+        const aKali = contohKali.a, bKali = contohKali.b;
+        const aKaliB = aKali * bKali;
+        const fAKali = f(aKali), fBKali = f(bKali);
+        const fAKaliB = f(aKaliB), fAKaliKaliFB = fAKali * fBKali;
+
+        const hasilPemetaan = contoh.map(x => ({ x, fx: f(x) }));
+        const imageSet = [...new Set(hasilPemetaan.map(item => formatQQ(item.fx)))];
+        const kernel = hasilPemetaan.filter(item => samaQQ(item.fx, 0)).map(item => item.x);
+
+        let informasi = `
+            <div class="box">
+                <div class="section-title">Informasi Fungsi</div>
+                <div class="info-grid">
+                    <div class="info-item"><strong>Ring Domain :</strong> ℚ</div>
+                    <div class="info-item"><strong>Ring Kodomain :</strong> ℚ</div>
+                    <div class="info-item"><strong>Fungsi Pemetaan :</strong> f : ℚ → ℚ</div>
+                    <div class="info-item"><strong>Variabel :</strong> ${variabelInput}</div>
+                    <div class="info-item"><strong>Fungsi :</strong> f(${variabelInput}) = ${fungsiInput}</div>
+                    <div class="info-item"><strong>Contoh Elemen yang Diuji :</strong> {${contoh.map(formatQQ).join(", ")}}</div>
+                </div>
+            </div>`;
+
+        let status = `
+            <div class="box"><div class="status ${homomorfisma ? "status-hijau" : "status-merah"}">
+                ${homomorfisma ? "HOMOMORFISMA RING" : "BUKAN HOMOMORFISMA RING"}
+            </div></div>`;
+
+        let syarat = `
+            <div class="box">
+                <div class="section-title">Syarat Homomorfisma Ring</div>
+                <div class="syarat">
+                    Misalkan:<br>f : ℚ → ℚ<br><br>
+                    Fungsi f disebut homomorfisma ring apabila memenuhi dua sifat utama:<br><br>
+                    <strong>1. Mempertahankan operasi penjumlahan</strong>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    untuk setiap a,b ∈ ℚ.<br><br>
+                    <strong>2. Mempertahankan operasi perkalian</strong>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    untuk setiap a,b ∈ ℚ.
+                </div>
+            </div>`;
+
+        let penjelasan = `
+            <div class="box">
+                <div class="section-title">Penjelasan</div>
+                <div class="penjelasan">
+                    <p>Untuk menentukan apakah fungsi <strong>f : ℚ → ℚ</strong> merupakan homomorfisma ring,
+                    program memeriksa dua sifat utama, yaitu:</p>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    <p>untuk operasi penjumlahan, dan</p>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    <p>untuk operasi perkalian.</p>
+                    <p>Karena ℚ merupakan ring tak hingga, program menggunakan beberapa contoh bilangan rasional
+                    untuk pemeriksaan numerik.</p>
+
+                    <h4>Syarat 1: Mempertahankan Operasi Penjumlahan</h4>
+                    <p>Syarat pertama homomorfisma ring adalah:</p>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    <p>Artinya, kita mengambil dua elemen <strong>a</strong> dan <strong>b</strong> dari ring domain,
+                    kemudian membandingkan hasil fungsi dari penjumlahan keduanya dengan penjumlahan hasil fungsi
+                    masing-masing elemen.</p>
+                    <p>Sebagai contoh, kita ambil dua elemen dari ℚ:</p>
+                    <div class="formula">a = ${formatQQ(aJumlah)} &nbsp;&nbsp;&nbsp; b = ${formatQQ(bJumlah)}</div>
+                    <p>Selanjutnya, kita hitung penjumlahan kedua elemen tersebut:</p>
+                    <div class="formula">a + b = ${formatQQ(aJumlah)} + ${formatQQ(bJumlah)} = ${formatQQ(aTambahB)}</div>
+                    <p>Jadi, hasil penjumlahan kedua elemen di domain adalah:</p>
+                    <div class="formula">a + b = ${formatQQ(aTambahB)}</div>
+                    <p>Sekarang kita masukkan hasil tersebut ke dalam fungsi. Diperoleh:</p>
+                    <div class="formula">f(a + b) = f(${formatQQ(aTambahB)}) = ${formatQQ(fATambahB)}</div>
+                    <p>Selanjutnya, kita hitung bagian sebelah kanan, yaitu <strong>f(a) + f(b)</strong>.</p>
+                    <div class="formula">f(a) = f(${formatQQ(aJumlah)}) = ${formatQQ(fAJumlah)}</div>
+                    <div class="formula">f(b) = f(${formatQQ(bJumlah)}) = ${formatQQ(fBJumlah)}</div>
+                    <p>Kemudian kedua hasil tersebut dijumlahkan pada ring kodomain:</p>
+                    <div class="formula">f(a) + f(b) = ${formatQQ(fAJumlah)} + ${formatQQ(fBJumlah)} = ${formatQQ(fAJumlahTambahFB)}</div>
+                    <p>Dengan demikian, kita memperoleh:</p>
+                    <div class="formula">f(a + b) = ${formatQQ(fATambahB)}</div>
+                    <div class="formula">f(a) + f(b) = ${formatQQ(fAJumlahTambahFB)}</div>`;
+
+        if (contohPenjumlahan === null) {
+            penjelasan += `<p>Karena kedua hasil tersebut sama, maka untuk contoh yang dipilih diperoleh:</p>
+                <div class="formula">${formatQQ(fATambahB)} = ${formatQQ(fAJumlahTambahFB)}</div>
+                <p>Program kemudian memeriksa seluruh pasangan contoh bilangan rasional yang telah ditentukan.
+                Tidak ditemukan pasangan yang melanggar persamaan <strong>f(a + b) = f(a) + f(b)</strong>,
+                sehingga sifat penjumlahan <strong>terpenuhi pada contoh pengujian</strong>.</p>`;
+        } else {
+            penjelasan += `<p>Karena:</p><div class="formula">${formatQQ(fATambahB)} ≠ ${formatQQ(fAJumlahTambahFB)}</div>
+                <p>maka:</p><div class="formula">f(a + b) ≠ f(a) + f(b)</div>
+                <p>Artinya, ditemukan pasangan elemen <strong>a = ${formatQQ(aJumlah)}</strong> dan
+                <strong>b = ${formatQQ(bJumlah)}</strong> yang tidak memenuhi sifat mempertahankan operasi penjumlahan.</p>
+                <p>Dengan demikian, syarat pertama homomorfisma ring <strong>tidak terpenuhi</strong>.</p>`;
+        }
+
+        penjelasan += `<h4>Syarat 2: Mempertahankan Operasi Perkalian</h4>
+                    <p>Syarat kedua homomorfisma ring adalah:</p>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    <p>Artinya, kita mengambil dua elemen <strong>a</strong> dan <strong>b</strong> dari ring domain,
+                    kemudian membandingkan hasil fungsi dari perkalian keduanya dengan perkalian hasil fungsi masing-masing elemen.</p>
+                    <p>Sebagai contoh, kita ambil dua elemen dari ℚ:</p>
+                    <div class="formula">a = ${formatQQ(aKali)} &nbsp;&nbsp;&nbsp; b = ${formatQQ(bKali)}</div>
+                    <p>Selanjutnya, kita hitung perkalian kedua elemen tersebut:</p>
+                    <div class="formula">ab = ${formatQQ(aKali)} × ${formatQQ(bKali)} = ${formatQQ(aKaliB)}</div>
+                    <p>Jadi, hasil perkalian kedua elemen di domain adalah:</p>
+                    <div class="formula">ab = ${formatQQ(aKaliB)}</div>
+                    <p>Sekarang kita masukkan hasil tersebut ke dalam fungsi. Diperoleh:</p>
+                    <div class="formula">f(ab) = f(${formatQQ(aKaliB)}) = ${formatQQ(fAKaliB)}</div>
+                    <p>Selanjutnya, kita hitung bagian sebelah kanan, yaitu <strong>f(a)f(b)</strong>.</p>
+                    <div class="formula">f(a) = f(${formatQQ(aKali)}) = ${formatQQ(fAKali)}</div>
+                    <div class="formula">f(b) = f(${formatQQ(bKali)}) = ${formatQQ(fBKali)}</div>
+                    <p>Kemudian kedua hasil tersebut dikalikan pada ring kodomain:</p>
+                    <div class="formula">f(a)f(b) = ${formatQQ(fAKali)} × ${formatQQ(fBKali)} = ${formatQQ(fAKaliKaliFB)}</div>
+                    <p>Dengan demikian, kita memperoleh:</p>
+                    <div class="formula">f(ab) = ${formatQQ(fAKaliB)}</div>
+                    <div class="formula">f(a)f(b) = ${formatQQ(fAKaliKaliFB)}</div>`;
+
+        if (contohPerkalian === null) {
+            penjelasan += `<p>Karena kedua hasil tersebut sama, maka untuk contoh yang dipilih diperoleh:</p>
+                <div class="formula">${formatQQ(fAKaliB)} = ${formatQQ(fAKaliKaliFB)}</div>
+                <p>Program kemudian memeriksa seluruh pasangan contoh bilangan rasional yang telah ditentukan.
+                Tidak ditemukan pasangan yang melanggar persamaan <strong>f(ab) = f(a)f(b)</strong>, sehingga sifat perkalian
+                <strong>terpenuhi pada contoh pengujian</strong>.</p>`;
+        } else {
+            penjelasan += `<p>Karena:</p><div class="formula">${formatQQ(fAKaliB)} ≠ ${formatQQ(fAKaliKaliFB)}</div>
+                <p>maka:</p><div class="formula">f(ab) ≠ f(a)f(b)</div>
+                <p>Artinya, ditemukan pasangan elemen <strong>a = ${formatQQ(aKali)}</strong> dan
+                <strong>b = ${formatQQ(bKali)}</strong> yang tidak memenuhi sifat mempertahankan operasi perkalian.</p>
+                <p>Dengan demikian, syarat kedua homomorfisma ring <strong>tidak terpenuhi</strong>.</p>`;
+        }
+
+        penjelasan += `<h4>Kesimpulan Pemeriksaan</h4>
+            <p>Berdasarkan pemeriksaan numerik pada contoh bilangan rasional yang dipilih, hasil pengujian adalah:</p>
+            <div class="formula">f(a + b) = f(a) + f(b)</div>
+            <div class="formula">f(ab) = f(a)f(b)</div>
+            <p>${homomorfisma
+                ? "Kedua sifat tersebut terpenuhi pada seluruh pasangan contoh yang diuji."
+                : "Setidaknya salah satu sifat tersebut tidak terpenuhi pada pasangan contoh yang diuji."}</p>
+            <p><strong>Catatan:</strong> ℚ merupakan ring tak hingga, sehingga pemeriksaan numerik pada beberapa contoh
+            tidak dapat menggantikan pembuktian aljabar untuk seluruh elemen ℚ. Perhitungan JavaScript juga menggunakan
+            bilangan numerik, sehingga hasil dibandingkan dengan toleransi numerik.</p>
+            </div></div>`;
+
+        let kesimpulan = `<div class="box"><div class="kesimpulan ${homomorfisma ? "hijau" : "merah"}">
+            ${homomorfisma ? "MERUPAKAN HOMOMORFISMA RING" : "BUKAN HOMOMORFISMA RING"}
+        </div></div>`;
+
+        let tabelPemetaan = `<div class="box"><div class="section-title">Tabel Pemetaan</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        for (const item of hasilPemetaan) {
+            tabelPemetaan += `<tr><td>${formatQQ(item.x)}</td><td>f(${formatQQ(item.x)})</td><td>${formatQQ(item.fx)}</td></tr>`;
+        }
+        tabelPemetaan += `</tbody></table></div></div>`;
+
+        let imageTable = `<div class="box"><div class="section-title">Image</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        for (const item of hasilPemetaan) {
+            imageTable += `<tr><td>${formatQQ(item.x)}</td><td>f(${formatQQ(item.x)})</td><td>${formatQQ(item.fx)}</td></tr>`;
+        }
+        imageTable += `</tbody></table></div><br><strong>Image(f) = {${imageSet.join(", ")}}</strong></div>`;
+
+        let kernelTable = `<div class="box"><div class="section-title">Kernel</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        if (kernel.length === 0) {
+            kernelTable += `<tr><td colspan="3">Tidak terdapat elemen yang termasuk kernel.</td></tr>`;
+        } else {
+            for (const x of kernel) kernelTable += `<tr><td>${formatQQ(x)}</td><td>f(${formatQQ(x)})</td><td>0</td></tr>`;
+        }
+        kernelTable += `</tbody></table></div><br><strong>Ker(f) = {${kernel.map(formatQQ).join(", ")}}</strong></div>`;
+
+        hasil.innerHTML = informasi + status + syarat + penjelasan + kesimpulan + tabelPemetaan + imageTable + kernelTable;
+    }
+    catch (error) {
+        hasil.innerHTML = `<div class="box"><div class="status status-merah"><strong>Error:</strong><br><br>${error.message}</div></div>`;
+    }
+}
+
+// ============================================================
+// TAHAP 5 - LOGIKA RING R → R
+// ============================================================
+
+function buatFungsiRR(variabelInput, fungsiInput) {
+    const variabel = variabelInput.split(",").map(v => v.trim()).filter(v => v !== "");
+    if (variabel.length === 0) throw new Error("Variabel belum dimasukkan.");
+    if (variabel.length > 1) throw new Error("Untuk ℝ → ℝ, masukkan satu variabel saja.");
+    if (fungsiInput.trim() === "") throw new Error("Fungsi belum dimasukkan.");
+
+    for (const v of variabel) {
+        if (!/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(v)) {
+            throw new Error("Nama variabel '" + v + "' tidak valid.");
+        }
+    }
+
+    const fungsiJS = fungsiInput
+        .replace(/²/g, "**2")
+        .replace(/³/g, "**3")
+        .replace(/\^/g, "**");
+
+    let fungsi;
+    try {
+        fungsi = new Function(...variabel, `"use strict"; return (${fungsiJS});`);
+    } catch (error) {
+        throw new Error("Penulisan fungsi tidak valid.");
+    }
+
+    return function (...nilai) {
+        let hasil;
+        try {
+            hasil = fungsi(...nilai);
+        } catch (error) {
+            throw new Error("Fungsi tidak dapat dihitung.");
+        }
+
+        if (typeof hasil !== "number" || !Number.isFinite(hasil)) {
+            throw new Error("Fungsi menghasilkan nilai yang tidak valid.");
+        }
+
+        return hasil;
+    };
+}
+
+function samaRR(a, b) {
+    const toleransi = 1e-10;
+    return Math.abs(a - b) <= toleransi * Math.max(1, Math.abs(a), Math.abs(b));
+}
+
+function formatRR(nilai) {
+    if (Math.abs(nilai) < 1e-12) return "0";
+    return Number(nilai.toFixed(6)).toString();
+}
+
+function ujiRR() {
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+    if (domain !== "R" || kodomain !== "R") {
+        fungsiUjiLama.call(tombolUjiRing);
+        return;
+    }
+
+    const variabelInput = document.getElementById("variabel").value.trim();
+    const fungsiInput = document.getElementById("fungsi").value.trim();
+    const hasil = document.getElementById("hasil");
+
+    if (variabelInput === "") {
+        alert("Masukkan variabel terlebih dahulu.");
+        return;
+    }
+
+    if (fungsiInput === "") {
+        alert("Masukkan fungsi terlebih dahulu.");
+        return;
+    }
+
+    try {
+        const f = buatFungsiRR(variabelInput, fungsiInput);
+
+        // Contoh bilangan real untuk pengujian numerik.
+        const contoh = [-2.5, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2.5];
+
+        let memenuhiPenjumlahan = true;
+        let memenuhiPerkalian = true;
+        let contohPenjumlahan = null;
+        let contohPerkalian = null;
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+                const kiri = f(a + b);
+                const kanan = f(a) + f(b);
+
+                if (!samaRR(kiri, kanan)) {
+                    memenuhiPenjumlahan = false;
+                    contohPenjumlahan = { a, b, kiri, kanan };
+                    break;
+                }
+            }
+            if (!memenuhiPenjumlahan) break;
+        }
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+                const kiri = f(a * b);
+                const kanan = f(a) * f(b);
+
+                if (!samaRR(kiri, kanan)) {
+                    memenuhiPerkalian = false;
+                    contohPerkalian = { a, b, kiri, kanan };
+                    break;
+                }
+            }
+            if (!memenuhiPerkalian) break;
+        }
+
+        const homomorfisma = memenuhiPenjumlahan && memenuhiPerkalian;
+
+        const contohJumlah = contohPenjumlahan || { a: -2.5, b: -1.5 };
+        const contohKali = contohPerkalian || { a: -2.5, b: -1.5 };
+
+        const aJumlah = contohJumlah.a;
+        const bJumlah = contohJumlah.b;
+        const aTambahB = aJumlah + bJumlah;
+        const fAJumlah = f(aJumlah);
+        const fBJumlah = f(bJumlah);
+        const fATambahB = f(aTambahB);
+        const fAJumlahTambahFB = fAJumlah + fBJumlah;
+
+        const aKali = contohKali.a;
+        const bKali = contohKali.b;
+        const aKaliB = aKali * bKali;
+        const fAKali = f(aKali);
+        const fBKali = f(bKali);
+        const fAKaliB = f(aKaliB);
+        const fAKaliKaliFB = fAKali * fBKali;
+
+        const hasilPemetaan = contoh.map(x => ({ x, fx: f(x) }));
+        const imageArray = [...new Set(hasilPemetaan.map(item => formatRR(item.fx)))];
+        const kernel = hasilPemetaan.filter(item => samaRR(item.fx, 0)).map(item => item.x);
+
+        let informasi = `
+            <div class="box">
+                <div class="section-title">Informasi Fungsi</div>
+                <div class="info-grid">
+                    <div class="info-item"><strong>Ring Domain :</strong> ℝ</div>
+                    <div class="info-item"><strong>Ring Kodomain :</strong> ℝ</div>
+                    <div class="info-item"><strong>Fungsi Pemetaan :</strong> f : ℝ → ℝ</div>
+                    <div class="info-item"><strong>Variabel :</strong> ${variabelInput}</div>
+                    <div class="info-item"><strong>Fungsi :</strong> f(${variabelInput}) = ${fungsiInput}</div>
+                    <div class="info-item"><strong>Contoh Elemen yang Diuji :</strong> {${contoh.map(formatRR).join(", ")}}</div>
+                </div>
+            </div>`;
+
+        let status = `
+            <div class="box">
+                <div class="status ${homomorfisma ? "status-hijau" : "status-merah"}">
+                    ${homomorfisma ? "HOMOMORFISMA RING" : "BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>`;
+
+        let syarat = `
+            <div class="box">
+                <div class="section-title">Syarat Homomorfisma Ring</div>
+                <div class="syarat">
+                    Misalkan:<br><br>
+                    f : R → S<br><br>
+                    Fungsi f disebut homomorfisma ring apabila memenuhi dua sifat utama:<br><br>
+                    <strong>1. Mempertahankan operasi penjumlahan</strong>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    untuk setiap a,b ∈ R.<br><br>
+                    <strong>2. Mempertahankan operasi perkalian</strong>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    untuk setiap a,b ∈ R.
+                </div>
+            </div>`;
+
+        let penjelasan = `
+            <div class="box">
+                <div class="section-title">Penjelasan</div>
+                <div class="penjelasan">
+                    <p>Untuk menentukan apakah fungsi <strong>f</strong> merupakan homomorfisma ring,
+                    program memeriksa dua sifat utama, yaitu:</p>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    <p>untuk operasi penjumlahan, dan</p>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    <p>untuk operasi perkalian.</p>
+                    <p>Pemeriksaan dilakukan menggunakan beberapa contoh bilangan real dan seluruh pasangan
+                    dari contoh tersebut. Karena ℝ merupakan himpunan tak hingga, pengujian numerik ini
+                    digunakan sebagai pemeriksaan contoh dan bukan sebagai pengganti pembuktian aljabar untuk seluruh ℝ.</p>
+
+                    <h4>Syarat 1: Mempertahankan Operasi Penjumlahan</h4>
+                    <p>Syarat pertama homomorfisma ring adalah:</p>
+                    <div class="formula">f(a + b) = f(a) + f(b)</div>
+                    <p>Artinya, kita mengambil dua elemen <strong>a</strong> dan <strong>b</strong> dari ring domain,
+                    kemudian membandingkan hasil fungsi dari penjumlahan keduanya dengan penjumlahan hasil fungsi masing-masing elemen.</p>
+                    <p>Sebagai contoh, kita ambil dua elemen dari ℝ:</p>
+                    <div class="formula">a = ${formatRR(aJumlah)} &nbsp;&nbsp;&nbsp; b = ${formatRR(bJumlah)}</div>
+                    <p>Selanjutnya, kita hitung penjumlahan kedua elemen tersebut:</p>
+                    <div class="formula">a + b = ${formatRR(aJumlah)} + ${formatRR(bJumlah)} = ${formatRR(aTambahB)}</div>
+                    <p>Jadi, hasil penjumlahan kedua elemen di domain adalah:</p>
+                    <div class="formula">a + b = ${formatRR(aTambahB)}</div>
+                    <p>Sekarang kita masukkan hasil tersebut ke dalam fungsi. Diperoleh:</p>
+                    <div class="formula">f(a + b) = f(${formatRR(aTambahB)}) = ${formatRR(fATambahB)}</div>
+                    <p>Selanjutnya, kita hitung bagian sebelah kanan, yaitu <strong>f(a) + f(b)</strong>.</p>
+                    <div class="formula">f(a) = f(${formatRR(aJumlah)}) = ${formatRR(fAJumlah)}</div>
+                    <div class="formula">f(b) = f(${formatRR(bJumlah)}) = ${formatRR(fBJumlah)}</div>
+                    <p>Kemudian kedua hasil tersebut dijumlahkan pada ring kodomain:</p>
+                    <div class="formula">f(a) + f(b) = ${formatRR(fAJumlah)} + ${formatRR(fBJumlah)} = ${formatRR(fAJumlahTambahFB)}</div>
+                    <p>Dengan demikian, kita memperoleh:</p>
+                    <div class="formula">f(a + b) = ${formatRR(fATambahB)}</div>
+                    <div class="formula">f(a) + f(b) = ${formatRR(fAJumlahTambahFB)}</div>`;
+
+        if (contohPenjumlahan === null) {
+            penjelasan += `<p>Karena kedua hasil tersebut sama, maka untuk contoh yang dipilih diperoleh:</p>
+                <div class="formula">${formatRR(fATambahB)} = ${formatRR(fAJumlahTambahFB)}</div>
+                <p>Program kemudian memeriksa seluruh pasangan contoh bilangan real yang telah ditentukan.
+                Tidak ditemukan pasangan yang melanggar persamaan <strong>f(a + b) = f(a) + f(b)</strong>,
+                sehingga sifat penjumlahan <strong>terpenuhi pada contoh pengujian</strong>.</p>`;
+        } else {
+            penjelasan += `<p>Karena:</p>
+                <div class="formula">${formatRR(fATambahB)} ≠ ${formatRR(fAJumlahTambahFB)}</div>
+                <p>maka:</p>
+                <div class="formula">f(a + b) ≠ f(a) + f(b)</div>
+                <p>Artinya, ditemukan pasangan elemen <strong>a = ${formatRR(aJumlah)}</strong> dan
+                <strong>b = ${formatRR(bJumlah)}</strong> yang tidak memenuhi sifat mempertahankan operasi penjumlahan.</p>
+                <p>Dengan demikian, syarat pertama homomorfisma ring <strong>tidak terpenuhi</strong>.</p>`;
+        }
+
+        penjelasan += `<h4>Syarat 2: Mempertahankan Operasi Perkalian</h4>
+                    <p>Syarat kedua homomorfisma ring adalah:</p>
+                    <div class="formula">f(ab) = f(a)f(b)</div>
+                    <p>Artinya, kita mengambil dua elemen <strong>a</strong> dan <strong>b</strong> dari ring domain,
+                    kemudian membandingkan hasil fungsi dari perkalian keduanya dengan perkalian hasil fungsi masing-masing elemen.</p>
+                    <p>Sebagai contoh, kita ambil dua elemen dari ℝ:</p>
+                    <div class="formula">a = ${formatRR(aKali)} &nbsp;&nbsp;&nbsp; b = ${formatRR(bKali)}</div>
+                    <p>Selanjutnya, kita hitung perkalian kedua elemen tersebut:</p>
+                    <div class="formula">ab = ${formatRR(aKali)} × ${formatRR(bKali)} = ${formatRR(aKaliB)}</div>
+                    <p>Jadi, hasil perkalian kedua elemen di domain adalah:</p>
+                    <div class="formula">ab = ${formatRR(aKaliB)}</div>
+                    <p>Sekarang kita masukkan hasil tersebut ke dalam fungsi. Diperoleh:</p>
+                    <div class="formula">f(ab) = f(${formatRR(aKaliB)}) = ${formatRR(fAKaliB)}</div>
+                    <p>Selanjutnya, kita hitung bagian sebelah kanan, yaitu <strong>f(a)f(b)</strong>.</p>
+                    <div class="formula">f(a) = f(${formatRR(aKali)}) = ${formatRR(fAKali)}</div>
+                    <div class="formula">f(b) = f(${formatRR(bKali)}) = ${formatRR(fBKali)}</div>
+                    <p>Kemudian kedua hasil tersebut dikalikan pada ring kodomain:</p>
+                    <div class="formula">f(a)f(b) = ${formatRR(fAKali)} × ${formatRR(fBKali)} = ${formatRR(fAKaliKaliFB)}</div>
+                    <p>Dengan demikian, kita memperoleh:</p>
+                    <div class="formula">f(ab) = ${formatRR(fAKaliB)}</div>
+                    <div class="formula">f(a)f(b) = ${formatRR(fAKaliKaliFB)}</div>`;
+
+        if (contohPerkalian === null) {
+            penjelasan += `<p>Karena kedua hasil tersebut sama, maka untuk contoh yang dipilih diperoleh:</p>
+                <div class="formula">${formatRR(fAKaliB)} = ${formatRR(fAKaliKaliFB)}</div>
+                <p>Program kemudian memeriksa seluruh pasangan contoh bilangan real yang telah ditentukan.
+                Tidak ditemukan pasangan yang melanggar persamaan <strong>f(ab) = f(a)f(b)</strong>, sehingga sifat perkalian
+                <strong>terpenuhi pada contoh pengujian</strong>.</p>`;
+        } else {
+            penjelasan += `<p>Karena:</p>
+                <div class="formula">${formatRR(fAKaliB)} ≠ ${formatRR(fAKaliKaliFB)}</div>
+                <p>maka:</p>
+                <div class="formula">f(ab) ≠ f(a)f(b)</div>
+                <p>Artinya, ditemukan pasangan elemen <strong>a = ${formatRR(aKali)}</strong> dan
+                <strong>b = ${formatRR(bKali)}</strong> yang tidak memenuhi sifat mempertahankan operasi perkalian.</p>
+                <p>Dengan demikian, syarat kedua homomorfisma ring <strong>tidak terpenuhi</strong>.</p>`;
+        }
+
+        penjelasan += `<h4>Kesimpulan Pemeriksaan</h4>
+            <p>Berdasarkan pemeriksaan numerik pada contoh bilangan real yang dipilih, hasil pengujian adalah:</p>
+            <div class="formula">f(a + b) = f(a) + f(b)</div>
+            <div class="formula">f(ab) = f(a)f(b)</div>
+            <p>${homomorfisma
+                ? "Kedua sifat tersebut terpenuhi pada seluruh pasangan contoh yang diuji."
+                : "Setidaknya salah satu sifat tersebut tidak terpenuhi pada pasangan contoh yang diuji."}</p>
+            <p><strong>Catatan:</strong> ℝ merupakan ring tak hingga, sehingga pemeriksaan numerik pada beberapa contoh
+            tidak dapat menggantikan pembuktian aljabar untuk seluruh elemen ℝ. Perhitungan JavaScript juga menggunakan
+            bilangan floating-point, sehingga hasil dibandingkan dengan toleransi numerik.</p>
+            </div></div>`;
+
+        let kesimpulan = `<div class="box"><div class="kesimpulan ${homomorfisma ? "hijau" : "merah"}">
+            ${homomorfisma ? "MERUPAKAN HOMOMORFISMA RING" : "BUKAN HOMOMORFISMA RING"}
+        </div></div>`;
+
+        let tabelPemetaan = `<div class="box"><div class="section-title">Tabel Pemetaan</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        for (const item of hasilPemetaan) {
+            tabelPemetaan += `<tr><td>${formatRR(item.x)}</td><td>f(${formatRR(item.x)})</td><td>${formatRR(item.fx)}</td></tr>`;
+        }
+        tabelPemetaan += `</tbody></table></div></div>`;
+
+        let imageTable = `<div class="box"><div class="section-title">Image</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        for (const item of hasilPemetaan) {
+            imageTable += `<tr><td>${formatRR(item.x)}</td><td>f(${formatRR(item.x)})</td><td>${formatRR(item.fx)}</td></tr>`;
+        }
+        imageTable += `</tbody></table></div><br><strong>Image(f) = {${imageArray.join(", ")}}</strong></div>`;
+
+        let kernelTable = `<div class="box"><div class="section-title">Kernel</div><div class="table-container"><table>
+            <thead><tr><th>Elemen Domain</th><th>Fungsi f</th><th>Daerah Hasil</th></tr></thead><tbody>`;
+        if (kernel.length === 0) {
+            kernelTable += `<tr><td colspan="3">Tidak terdapat elemen yang termasuk kernel pada contoh pengujian.</td></tr>`;
+        } else {
+            for (const x of kernel) {
+                kernelTable += `<tr><td>${formatRR(x)}</td><td>f(${formatRR(x)})</td><td>0</td></tr>`;
+            }
+        }
+        kernelTable += `</tbody></table></div><br><strong>Ker(f) = {${kernel.map(formatRR).join(", ")}}</strong></div>`;
+
+        hasil.innerHTML = informasi + status + syarat + penjelasan + kesimpulan + tabelPemetaan + imageTable + kernelTable;
+    }
+    catch (error) {
+        hasil.innerHTML = `<div class="box"><div class="status status-merah"><strong>Error:</strong><br><br>${error.message}</div></div>`;
+    }
+}
+
+
+// ============================================================
+// PENGUJIAN RING ℂ → ℂ
+// ============================================================
+
+class BilanganKompleks {
+    constructor(re = 0, im = 0) {
+        this.re = Number(re);
+        this.im = Number(im);
+    }
+}
+
+function tambahC(a, b) {
+    return new BilanganKompleks(a.re + b.re, a.im + b.im);
+}
+
+function kurangC(a, b) {
+    return new BilanganKompleks(a.re - b.re, a.im - b.im);
+}
+
+function kaliC(a, b) {
+    return new BilanganKompleks(
+        a.re * b.re - a.im * b.im,
+        a.re * b.im + a.im * b.re
+    );
+}
+
+function bagiC(a, b) {
+    const penyebut = b.re * b.re + b.im * b.im;
+    if (penyebut === 0) throw new Error("Pembagian dengan 0 tidak diperbolehkan.");
+    return new BilanganKompleks(
+        (a.re * b.re + a.im * b.im) / penyebut,
+        (a.im * b.re - a.re * b.im) / penyebut
+    );
+}
+
+function pangkatC(a, n) {
+    if (!Number.isInteger(n)) {
+        throw new Error("Pangkat pada bilangan kompleks harus berupa bilangan bulat.");
+    }
+    if (n === 0) return new BilanganKompleks(1, 0);
+    if (n < 0) return bagiC(new BilanganKompleks(1, 0), pangkatC(a, -n));
+
+    let hasil = new BilanganKompleks(1, 0);
+    for (let i = 0; i < n; i++) hasil = kaliC(hasil, a);
+    return hasil;
+}
+
+function angkaC(x) {
+    return new BilanganKompleks(Number(x), 0);
+}
+
+function nolC(z) {
+    return Math.abs(z.re) < 1e-10 && Math.abs(z.im) < 1e-10;
+}
+
+function samaC(a, b) {
+    const toleransi = 1e-10;
+    const skala = Math.max(1, Math.abs(a.re), Math.abs(a.im), Math.abs(b.re), Math.abs(b.im));
+    return Math.abs(a.re - b.re) <= toleransi * skala &&
+           Math.abs(a.im - b.im) <= toleransi * skala;
+}
+
+function formatC(z) {
+    const re = Math.abs(z.re) < 1e-10 ? 0 : Number(z.re.toFixed(6));
+    const im = Math.abs(z.im) < 1e-10 ? 0 : Number(z.im.toFixed(6));
+
+    if (re === 0 && im === 0) return "0";
+    if (im === 0) return String(re);
+    if (re === 0) {
+        if (im === 1) return "i";
+        if (im === -1) return "-i";
+        return `${im}i`;
+    }
+
+    const bagianIm = Math.abs(im) === 1 ? "i" : `${Math.abs(im)}i`;
+    return `${re} ${im >= 0 ? "+" : "-"} ${bagianIm}`;
+}
+
+function tokenisasiC(teks) {
+    let s = teks
+        .replace(/²/g, "^2")
+        .replace(/³/g, "^3")
+        .replace(/\s+/g, "")
+        .replace(/−/g, "-");
+
+    // Mendukung penulisan seperti 2z, 2i, zi, z(z+1), dan (z+1)z.
+    s = s.replace(/(\d|z|i|\))(?=(z|i|\())/gi, "$1*");
+    s = s.replace(/(\))(?=(\d))/g, "$1*");
+
+    const token = [];
+    let i = 0;
+    while (i < s.length) {
+        const c = s[i];
+        if (/[0-9.]/.test(c)) {
+            const potongan = s.slice(i).match(/^(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?/);
+            if (!potongan) throw new Error("Angka pada fungsi tidak valid.");
+            token.push({ tipe: "angka", nilai: Number(potongan[0]) });
+            i += potongan[0].length;
+        } else if (c.toLowerCase() === "z") {
+            token.push({ tipe: "z" }); i++;
+        } else if (c.toLowerCase() === "i") {
+            token.push({ tipe: "i" }); i++;
+        } else if ("+-*/^()".includes(c)) {
+            token.push({ tipe: c }); i++;
+        } else {
+            throw new Error(`Simbol '${c}' belum didukung pada fungsi ℂ → ℂ.`);
+        }
+    }
+    token.push({ tipe: "EOF" });
+    return token;
+}
+
+function buatFungsiC(fungsiInput) {
+    if (fungsiInput.trim() === "") throw new Error("Fungsi belum dimasukkan.");
+
+    const tokens = tokenisasiC(fungsiInput);
+    let pos = 0;
+
+    function lihat() { return tokens[pos].tipe; }
+    function ambil(tipe) {
+        if (lihat() !== tipe) throw new Error("Penulisan fungsi tidak valid.");
+        return tokens[pos++];
+    }
+
+    function ekspresi(z) {
+        let hasil = suku(z);
+        while (lihat() === "+" || lihat() === "-") {
+            const op = tokens[pos++].tipe;
+            const kanan = suku(z);
+            hasil = op === "+" ? tambahC(hasil, kanan) : kurangC(hasil, kanan);
+        }
+        return hasil;
+    }
+
+    function suku(z) {
+        let hasil = pangkat(z);
+        while (lihat() === "*" || lihat() === "/") {
+            const op = tokens[pos++].tipe;
+            const kanan = pangkat(z);
+            hasil = op === "*" ? kaliC(hasil, kanan) : bagiC(hasil, kanan);
+        }
+        return hasil;
+    }
+
+    function pangkat(z) {
+        let hasil = unary(z);
+        if (lihat() === "^") {
+            ambil("^");
+            const eksponen = unary(z);
+            if (Math.abs(eksponen.im) > 1e-12 || !Number.isInteger(eksponen.re)) {
+                throw new Error("Pangkat harus berupa bilangan bulat, misalnya z^2 atau z³.");
+            }
+            hasil = pangkatC(hasil, eksponen.re);
+        }
+        return hasil;
+    }
+
+    function unary(z) {
+        if (lihat() === "+") { ambil("+"); return unary(z); }
+        if (lihat() === "-") { ambil("-"); return kaliC(angkaC(-1), unary(z)); }
+        return dasar(z);
+    }
+
+    function dasar(z) {
+        if (lihat() === "angka") return angkaC(ambil("angka").nilai);
+        if (lihat() === "z") { ambil("z"); return z; }
+        if (lihat() === "i") { ambil("i"); return new BilanganKompleks(0, 1); }
+        if (lihat() === "(") {
+            ambil("(");
+            const hasil = ekspresi(z);
+            ambil(")");
+            return hasil;
+        }
+        throw new Error("Penulisan fungsi tidak valid.");
+    }
+
+    return function(z) {
+        pos = 0;
+        const hasil = ekspresi(z);
+        if (lihat() !== "EOF") throw new Error("Penulisan fungsi tidak valid.");
+        if (!Number.isFinite(hasil.re) || !Number.isFinite(hasil.im)) {
+            throw new Error("Fungsi menghasilkan nilai yang tidak valid.");
+        }
+        return hasil;
+    };
+}
+
+function ujiCC() {
+
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+    // Pastikan hanya digunakan untuk C → C
+    if (domain !== "C" || kodomain !== "C") {
+        fungsiUjiLama.call(tombolUjiRing);
+        return;
+    }
+
+    const variabelInput = document.getElementById("variabel").value.trim();
+    const fungsiInput = document.getElementById("fungsi").value.trim();
+    const hasil = document.getElementById("hasil");
+
+    if (variabelInput === "") {
+        alert("Masukkan variabel terlebih dahulu.");
+        return;
+    }
+
+    if (fungsiInput === "") {
+        alert("Masukkan fungsi terlebih dahulu.");
+        return;
+    }
+
+    // Untuk C → C digunakan satu variabel, yaitu z.
+    if (variabelInput !== "z") {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    Untuk ℂ → ℂ, gunakan satu variabel dengan nama <strong>z</strong>.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    try {
+
+        const f = buatFungsiC(fungsiInput);
+
+        // Contoh elemen kompleks untuk pengujian numerik.
+        const contoh = [
+            new BilanganKompleks(0, 0),
+            new BilanganKompleks(1, 0),
+            new BilanganKompleks(-1, 0),
+            new BilanganKompleks(0, 1),
+            new BilanganKompleks(0, -1),
+            new BilanganKompleks(1, 1),
+            new BilanganKompleks(1, -1),
+            new BilanganKompleks(-1, 1),
+            new BilanganKompleks(-1, -1)
+        ];
+
+        let gagalJumlah = null;
+        let gagalKali = null;
+
+        // ====================================================
+        // CEK PENJUMLAHAN
+        // ====================================================
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const aTambahB = tambahC(a, b);
+                const kiri = f(aTambahB);
+                const kanan = tambahC(f(a), f(b));
+
+                if (!samaC(kiri, kanan)) {
+                    gagalJumlah = {
+                        a: a,
+                        b: b,
+                        aTambahB: aTambahB,
+                        fa: f(a),
+                        fb: f(b),
+                        kiri: kiri,
+                        kanan: kanan
+                    };
+                    break;
+                }
+            }
+
+            if (gagalJumlah !== null) break;
+        }
+
+        // ====================================================
+        // CEK PERKALIAN
+        // ====================================================
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const aKaliB = kaliC(a, b);
+                const kiri = f(aKaliB);
+                const kanan = kaliC(f(a), f(b));
+
+                if (!samaC(kiri, kanan)) {
+                    gagalKali = {
+                        a: a,
+                        b: b,
+                        aKaliB: aKaliB,
+                        fa: f(a),
+                        fb: f(b),
+                        kiri: kiri,
+                        kanan: kanan
+                    };
+                    break;
+                }
+            }
+
+            if (gagalKali !== null) break;
+        }
+
+        const homomorfisma = gagalJumlah === null && gagalKali === null;
+
+        // ====================================================
+        // INFORMASI FUNGSI
+        // ====================================================
+
+        let informasi = `
+            <div class="box">
+                <div class="section-title">Informasi Fungsi</div>
+
+                <div class="info-grid">
+
+                    <div class="info-item">
+                        <strong>Ring Domain :</strong> ℂ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Ring Kodomain :</strong> ℂ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi Pemetaan :</strong> f : ℂ → ℂ
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Elemen Domain :</strong> Tak hingga
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Variabel :</strong> ${variabelInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi :</strong> f(${variabelInput}) = ${fungsiInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Variabel :</strong> 1
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Contoh Elemen Domain :</strong>
+                        {${contoh.map(formatC).join(", ")}}
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // STATUS
+        // ====================================================
+
+        let status = `
+            <div class="box">
+                <div class="status ${homomorfisma ? "status-hijau" : "status-merah"}">
+                    ${homomorfisma
+                        ? "HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // SYARAT
+        // ====================================================
+
+        let syarat = `
+            <div class="box">
+                <div class="section-title">Syarat Homomorfisma Ring</div>
+
+                <div class="syarat">
+                    Misalkan:
+                    <br>
+                    f : R → S
+                    <br><br>
+
+                    Fungsi f disebut homomorfisma ring apabila memenuhi dua sifat utama:
+                    <br><br>
+
+                    <strong>1. Mempertahankan operasi penjumlahan</strong>
+                    <div class="formula">
+                        f(a + b) = f(a) + f(b)
+                    </div>
+                    untuk setiap a,b ∈ R.
+                    <br><br>
+
+                    <strong>2. Mempertahankan operasi perkalian</strong>
+                    <div class="formula">
+                        f(ab) = f(a)f(b)
+                    </div>
+                    untuk setiap a,b ∈ R.
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // PENJELASAN
+        // ====================================================
+
+        let penjelasan = `
+            <div class="box">
+                <div class="section-title">Penjelasan</div>
+
+                <div class="penjelasan">
+
+                    <p>
+                        Untuk menentukan apakah fungsi
+                        <strong>f : ℂ → ℂ</strong> merupakan homomorfisma ring,
+                        program memeriksa dua sifat utama, yaitu mempertahankan
+                        operasi penjumlahan dan mempertahankan operasi perkalian.
+                    </p>
+
+                    <h4>1. Mempertahankan Operasi Penjumlahan</h4>
+
+                    <p>
+                        Syarat pertama homomorfisma ring adalah:
+                    </p>
+
+                    <div class="formula">
+                        f(a + b) = f(a) + f(b)
+                    </div>
+
+                    <p>
+                        Artinya, kita mengambil dua elemen <strong>a</strong> dan
+                        <strong>b</strong> dari ring domain ℂ, kemudian membandingkan
+                        hasil fungsi dari penjumlahan keduanya dengan penjumlahan
+                        hasil fungsi masing-masing elemen.
+                    </p>
+        `;
+
+        const contohJumlah = gagalJumlah !== null
+            ? { a: gagalJumlah.a, b: gagalJumlah.b }
+            : { a: contoh[5], b: contoh[7] };
+
+        const aJumlah = contohJumlah.a;
+        const bJumlah = contohJumlah.b;
+        const aJumlahB = tambahC(aJumlah, bJumlah);
+        const fAJumlahB = f(aJumlahB);
+        const fAJumlah = f(aJumlah);
+        const fBJumlah = f(bJumlah);
+        const fAJumlahTambahFB = tambahC(fAJumlah, fBJumlah);
+
+        penjelasan += `
+                    <p>
+                        Sebagai contoh, kita ambil dua elemen dari domain:
+                    </p>
+
+                    <div class="formula">
+                        a = ${formatC(aJumlah)}
+                        &nbsp;&nbsp;&nbsp;
+                        b = ${formatC(bJumlah)}
+                    </div>
+
+                    <p>
+                        Selanjutnya, kita hitung penjumlahan kedua elemen di dalam
+                        ring domain ℂ. Diperoleh:
+                    </p>
+
+                    <div class="formula">
+                        a + b = ${formatC(aJumlah)} + ${formatC(bJumlah)} = ${formatC(aJumlahB)}
+                    </div>
+
+                    <p>
+                        Jadi, hasil penjumlahan kedua elemen di domain adalah:
+                    </p>
+
+                    <div class="formula">
+                        a + b = ${formatC(aJumlahB)}
+                    </div>
+
+                    <p>
+                        Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+                        Diperoleh:
+                    </p>
+
+                    <div class="formula">
+                        f(a + b) = f(${formatC(aJumlahB)}) = ${formatC(fAJumlahB)}
+                    </div>
+
+                    <p>
+                        Selanjutnya, kita hitung bagian sebelah kanan,
+                        yaitu <strong>f(a) + f(b)</strong>.
+                    </p>
+
+                    <div class="formula">
+                        f(a) = f(${formatC(aJumlah)}) = ${formatC(fAJumlah)}
+                    </div>
+
+                    <div class="formula">
+                        f(b) = f(${formatC(bJumlah)}) = ${formatC(fBJumlah)}
+                    </div>
+
+                    <p>
+                        Kemudian kedua hasil tersebut dijumlahkan pada ring kodomain ℂ:
+                    </p>
+
+                    <div class="formula">
+                        f(a) + f(b) = ${formatC(fAJumlah)} + ${formatC(fBJumlah)} = ${formatC(fAJumlahTambahFB)}
+                    </div>
+
+                    <p>
+                        Dengan demikian, kita memperoleh:
+                    </p>
+
+                    <div class="formula">
+                        f(a + b) = ${formatC(fAJumlahB)}
+                    </div>
+
+                    <div class="formula">
+                        f(a) + f(b) = ${formatC(fAJumlahTambahFB)}
+                    </div>
+        `;
+
+        if (gagalJumlah === null) {
+            penjelasan += `
+                    <p>
+                        Karena kedua hasil tersebut sama untuk contoh yang dipilih,
+                        dan seluruh pasangan elemen pada contoh pengujian telah
+                        diperiksa tanpa ditemukan pelanggaran, maka sifat
+                        penjumlahan terpenuhi pada pengujian.
+                    </p>
+
+                    <div class="formula">
+                        f(a + b) = f(a) + f(b)
+                    </div>
+            `;
+        } else {
+            penjelasan += `
+                    <p>
+                        Karena:
+                    </p>
+
+                    <div class="formula">
+                        ${formatC(fAJumlahB)} ≠ ${formatC(fAJumlahTambahFB)}
+                    </div>
+
+                    <p>
+                        maka:
+                    </p>
+
+                    <div class="formula">
+                        f(a + b) ≠ f(a) + f(b)
+                    </div>
+
+                    <p>
+                        Artinya, ditemukan pasangan elemen
+                        <strong>a = ${formatC(aJumlah)}</strong> dan
+                        <strong>b = ${formatC(bJumlah)}</strong> yang tidak memenuhi
+                        sifat mempertahankan operasi penjumlahan. Karena cukup
+                        ditemukan satu pasangan yang melanggar, maka syarat
+                        penjumlahan tidak terpenuhi.
+                    </p>
+            `;
+        }
+
+        // ====================================================
+        // PENJELASAN PERKALIAN
+        // ====================================================
+
+        const contohKali = gagalKali !== null
+            ? { a: gagalKali.a, b: gagalKali.b }
+            : { a: contoh[5], b: contoh[7] };
+
+        const aKali = contohKali.a;
+        const bKali = contohKali.b;
+        const aKaliB = kaliC(aKali, bKali);
+        const fAKaliB = f(aKaliB);
+        const fAKali = f(aKali);
+        const fBKali = f(bKali);
+        const fAKaliKaliFB = kaliC(fAKali, fBKali);
+
+        penjelasan += `
+                    <h4>2. Mempertahankan Operasi Perkalian</h4>
+
+                    <p>
+                        Syarat kedua homomorfisma ring adalah:
+                    </p>
+
+                    <div class="formula">
+                        f(ab) = f(a)f(b)
+                    </div>
+
+                    <p>
+                        Artinya, kita mengambil dua elemen <strong>a</strong> dan
+                        <strong>b</strong> dari ring domain ℂ, kemudian membandingkan
+                        hasil fungsi dari perkalian keduanya dengan perkalian hasil
+                        fungsi masing-masing elemen.
+                    </p>
+
+                    <p>
+                        Sebagai contoh, kita ambil dua elemen dari domain:
+                    </p>
+
+                    <div class="formula">
+                        a = ${formatC(aKali)}
+                        &nbsp;&nbsp;&nbsp;
+                        b = ${formatC(bKali)}
+                    </div>
+
+                    <p>
+                        Selanjutnya, kita hitung perkalian kedua elemen di dalam
+                        ring domain ℂ. Diperoleh:
+                    </p>
+
+                    <div class="formula">
+                        ab = ${formatC(aKali)} × ${formatC(bKali)} = ${formatC(aKaliB)}
+                    </div>
+
+                    <p>
+                        Jadi, hasil perkalian kedua elemen di domain adalah:
+                    </p>
+
+                    <div class="formula">
+                        ab = ${formatC(aKaliB)}
+                    </div>
+
+                    <p>
+                        Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+                        Diperoleh:
+                    </p>
+
+                    <div class="formula">
+                        f(ab) = f(${formatC(aKaliB)}) = ${formatC(fAKaliB)}
+                    </div>
+
+                    <p>
+                        Selanjutnya, kita hitung bagian sebelah kanan,
+                        yaitu <strong>f(a)f(b)</strong>.
+                    </p>
+
+                    <div class="formula">
+                        f(a) = f(${formatC(aKali)}) = ${formatC(fAKali)}
+                    </div>
+
+                    <div class="formula">
+                        f(b) = f(${formatC(bKali)}) = ${formatC(fBKali)}
+                    </div>
+
+                    <p>
+                        Kemudian kedua hasil tersebut dikalikan pada ring kodomain ℂ:
+                    </p>
+
+                    <div class="formula">
+                        f(a)f(b) = ${formatC(fAKali)} × ${formatC(fBKali)} = ${formatC(fAKaliKaliFB)}
+                    </div>
+
+                    <p>
+                        Dengan demikian, kita memperoleh:
+                    </p>
+
+                    <div class="formula">
+                        f(ab) = ${formatC(fAKaliB)}
+                    </div>
+
+                    <div class="formula">
+                        f(a)f(b) = ${formatC(fAKaliKaliFB)}
+                    </div>
+        `;
+
+        if (gagalKali === null) {
+            penjelasan += `
+                    <p>
+                        Karena kedua hasil tersebut sama untuk contoh yang dipilih,
+                        dan seluruh pasangan elemen pada contoh pengujian telah
+                        diperiksa tanpa ditemukan pelanggaran, maka sifat perkalian
+                        terpenuhi pada pengujian.
+                    </p>
+
+                    <div class="formula">
+                        f(ab) = f(a)f(b)
+                    </div>
+            `;
+        } else {
+            penjelasan += `
+                    <p>
+                        Karena:
+                    </p>
+
+                    <div class="formula">
+                        ${formatC(fAKaliB)} ≠ ${formatC(fAKaliKaliFB)}
+                    </div>
+
+                    <p>
+                        maka:
+                    </p>
+
+                    <div class="formula">
+                        f(ab) ≠ f(a)f(b)
+                    </div>
+
+                    <p>
+                        Artinya, ditemukan pasangan elemen
+                        <strong>a = ${formatC(aKali)}</strong> dan
+                        <strong>b = ${formatC(bKali)}</strong> yang tidak memenuhi
+                        sifat mempertahankan operasi perkalian. Karena cukup
+                        ditemukan satu pasangan yang melanggar, maka syarat
+                        perkalian tidak terpenuhi.
+                    </p>
+            `;
+        }
+
+        penjelasan += `
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // KESIMPULAN
+        // ====================================================
+
+        let kesimpulan = `
+            <div class="box">
+                <div class="kesimpulan ${homomorfisma ? "hijau" : "merah"}">
+                    ${homomorfisma
+                        ? "MERUPAKAN HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        // ====================================================
+        // PEMETAAN
+        // ====================================================
+
+        let tabelPemetaan = `
+            <div class="box">
+                <div class="section-title">Pemetaan</div>
+
+                <p>
+                    Berikut beberapa contoh pemetaan elemen dari domain ℂ
+                    ke kodomain ℂ berdasarkan fungsi yang dimasukkan.
+                </p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        for (const z of contoh) {
+            tabelPemetaan += `
+                <tr>
+                    <td>${formatC(z)}</td>
+                    <td>f(${formatC(z)})</td>
+                    <td>${formatC(f(z))}</td>
+                </tr>
+            `;
+        }
+
+        tabelPemetaan += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="margin-top:15px;">
+                    <strong>Catatan:</strong> tabel ini menampilkan contoh pemetaan
+                    dari elemen-elemen yang digunakan dalam pengujian.
+                </p>
+            </div>
+        `;
+
+        // ====================================================
+        // IMAGE
+        // ====================================================
+
+        const imageSet = new Set();
+        for (const z of contoh) imageSet.add(formatC(f(z)));
+        const imageArray = Array.from(imageSet);
+
+        let imageTable = `
+            <div class="box">
+                <div class="section-title">Image</div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        for (const z of contoh) {
+            imageTable += `
+                <tr>
+                    <td>${formatC(z)}</td>
+                    <td>f(${formatC(z)})</td>
+                    <td>${formatC(f(z))}</td>
+                </tr>
+            `;
+        }
+
+        imageTable += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <br>
+                <strong>Image(f) = {${imageArray.join(", ")}}</strong>
+
+                <p style="margin-top:15px;">
+                    <strong>Catatan:</strong> karena ℂ merupakan himpunan tak hingga,
+                    daftar di atas adalah image yang diperoleh dari contoh pengujian,
+                    bukan seluruh image secara simbolik.
+                </p>
+            </div>
+        `;
+
+        // ====================================================
+        // KERNEL
+        // ====================================================
+
+        const kernel = contoh.filter(z => nolC(f(z)));
+
+        let kernelTable = `
+            <div class="box">
+                <div class="section-title">Kernel</div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        if (kernel.length === 0) {
+            kernelTable += `
+                <tr>
+                    <td colspan="3">Tidak terdapat elemen kernel pada contoh pengujian.</td>
+                </tr>
+            `;
+        } else {
+            for (const z of kernel) {
+                kernelTable += `
+                    <tr>
+                        <td>${formatC(z)}</td>
+                        <td>f(${formatC(z)})</td>
+                        <td>0</td>
+                    </tr>
+                `;
+            }
+        }
+
+        kernelTable += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <br>
+                <strong>Ker(f) = {${kernel.map(formatC).join(", ")}}</strong>
+
+                <p style="margin-top:15px;">
+                    <strong>Catatan:</strong> kernel yang ditampilkan berasal dari
+                    elemen-elemen yang diperiksa pada contoh pengujian.
+                </p>
+            </div>
+        `;
+
+        hasil.innerHTML = informasi + status + syarat + penjelasan + kesimpulan
+            + tabelPemetaan + imageTable + kernelTable;
+
+    }
+    catch (error) {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    <strong>Error:</strong><br><br>${error.message}
+                </div>
+            </div>
+        `;
+    }
+}
+
+// ============================================================
+// MENGATUR FUNGSI TOMBOL BERDASARKAN JENIS RING
+// ============================================================
+
+// ============================================================
+// TAHAP 7 - PENGUJIAN KOMBINASI DOMAIN → KODOMAIN
+// Struktur hasil dibuat sama seperti pengujian Z_n → Z_m.
+// ============================================================
+
+function ujiKombinasiRing() {
+
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+    const n = parseInt(document.getElementById("n").value);
+    const m = parseInt(document.getElementById("m").value);
+
+    const variabelInput =
+        document.getElementById("variabel").value.trim();
+
+    const fungsiInput =
+        document.getElementById("fungsi").value.trim();
+
+    const hasil = document.getElementById("hasil");
+
+    const namaRing = {
+        Zn: "Z<sub>" + n + "</sub>",
+        Zm: "Z<sub>" + m + "</sub>",
+        Z: "ℤ",
+        Q: "ℚ",
+        R: "ℝ",
+        C: "ℂ"
+    };
+
+    /* ==========================================================
+       VALIDASI INPUT n DAN m SESUAI PILIHAN RING
+    ========================================================== */
+
+    if (domain === "Zn" && (isNaN(n) || n < 1)) {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    Ring Domain Z<sub>n</sub> harus memiliki nilai n
+                    berupa bilangan bulat positif.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    if (kodomain === "Zm" && (isNaN(m) || m < 1)) {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    Ring Kodomain Z<sub>m</sub> harus memiliki nilai m
+                    berupa bilangan bulat positif.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    if (variabelInput === "" || fungsiInput === "") {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    Variabel dan fungsi harus diisi.
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    try {
+
+        /* ======================================================
+           VARIABEL DAN FUNGSI
+        ====================================================== */
+
+        const variabel = variabelInput
+            .split(",")
+            .map(v => v.trim())
+            .filter(v => v !== "");
+
+        if (variabel.length !== 1) {
+            throw new Error("Untuk pengujian kombinasi ring, gunakan tepat satu variabel.");
+        }
+
+        /* ======================================================
+           BUAT FUNGSI
+        ====================================================== */
+
+        let fRaw;
+
+        if (domain === "C") {
+            if (variabel[0] !== "z") {
+                throw new Error("Untuk domain ℂ, gunakan variabel z.");
+            }
+            fRaw = buatFungsiC(fungsiInput);
+        } else {
+            const fungsiJS = fungsiInput
+                .replace(/²/g, "**2")
+                .replace(/³/g, "**3")
+                .replace(/\^/g, "**");
+
+            fRaw = new Function(
+                variabel[0],
+                `"use strict"; return (${fungsiJS});`
+            );
+        }
+
+        /* ======================================================
+           KONVERSI KE BILANGAN KOMPLEKS
+        ====================================================== */
+
+        function keC(x) {
+            if (x instanceof BilanganKompleks) return x;
+            return new BilanganKompleks(Number(x), 0);
+        }
+
+        /* ======================================================
+           OPERASI DOMAIN
+        ====================================================== */
+
+        function tambahDomain(a, b) {
+            if (domain === "Zn") return modulo(a + b, n);
+            if (domain === "C") return tambahC(a, b);
+            return a + b;
+        }
+
+        function kaliDomain(a, b) {
+            if (domain === "Zn") return modulo(a * b, n);
+            if (domain === "C") return kaliC(a, b);
+            return a * b;
+        }
+
+        /* ======================================================
+           OPERASI KODOMAIN
+        ====================================================== */
+
+        function tambahKodomain(a, b) {
+            if (kodomain === "Zm") return modulo(a + b, m);
+            if (kodomain === "Zn") return modulo(a + b, n);
+            if (kodomain === "C") return tambahC(keC(a), keC(b));
+            return a + b;
+        }
+
+        function kaliKodomain(a, b) {
+            if (kodomain === "Zm") return modulo(a * b, m);
+            if (kodomain === "Zn") return modulo(a * b, n);
+            if (kodomain === "C") return kaliC(keC(a), keC(b));
+            return a * b;
+        }
+
+        /* ======================================================
+           PEMERIKSAAN KEANGGOTAAN KODOMAIN
+        ====================================================== */
+
+        function evaluasi(x) {
+            let nilai = fRaw(x);
+
+            if (kodomain === "C") {
+                if (nilai instanceof BilanganKompleks) return nilai;
+
+                if (typeof nilai === "number" && Number.isFinite(nilai)) {
+                    return keC(nilai);
+                }
+
+                throw new Error("Fungsi tidak memetakan elemen ke ℂ.");
+            }
+
+            if (nilai instanceof BilanganKompleks) {
+                if (!samaRR(nilai.im, 0)) {
+                    throw new Error(
+                        `Fungsi tidak memetakan elemen ke ${namaRing[kodomain]} karena hasil memiliki bagian imajiner.`
+                    );
+                }
+                nilai = nilai.re;
+            }
+
+            if (typeof nilai !== "number" || !Number.isFinite(nilai)) {
+                throw new Error(
+                    `Fungsi tidak memetakan elemen ke ${namaRing[kodomain]}.`
+                );
+            }
+
+            if (kodomain === "Z" && !Number.isInteger(nilai)) {
+                throw new Error(
+                    "Fungsi tidak memetakan elemen ke ℤ karena terdapat hasil yang bukan bilangan bulat."
+                );
+            }
+
+            if (kodomain === "Zn") {
+                if (!Number.isInteger(nilai)) {
+                    throw new Error(
+                        `Fungsi tidak memetakan elemen ke Z<sub>${n}</sub> karena terdapat hasil yang bukan bilangan bulat.`
+                    );
+                }
+                return modulo(nilai, n);
+            }
+
+            if (kodomain === "Zm") {
+                if (!Number.isInteger(nilai)) {
+                    throw new Error(
+                        `Fungsi tidak memetakan elemen ke Z<sub>${m}</sub> karena terdapat hasil yang bukan bilangan bulat.`
+                    );
+                }
+                return modulo(nilai, m);
+            }
+
+            return nilai;
+        }
+
+        /* ======================================================
+           PEMBANDING NILAI
+        ====================================================== */
+
+        function sama(a, b) {
+            if (a instanceof BilanganKompleks || b instanceof BilanganKompleks) {
+                return samaC(keC(a), keC(b));
+            }
+
+            if (kodomain === "Zn") return modulo(a, n) === modulo(b, n);
+            if (kodomain === "Zm") return modulo(a, m) === modulo(b, m);
+
+            return samaRR(a, b);
+        }
+
+        /* ======================================================
+           FORMAT NILAI
+        ====================================================== */
+
+        function fmt(x) {
+            if (x instanceof BilanganKompleks) return formatC(x);
+            return String(formatRR(x));
+        }
+
+        /* ======================================================
+           BUAT CONTOH ELEMEN DOMAIN
+        ====================================================== */
+
+        let contoh;
+
+        if (domain === "Zn") {
+            contoh = [];
+            const batas = Math.min(n, 9);
+            for (let i = 0; i < batas; i++) {
+                contoh.push(i);
+            }
+        }
+        else if (domain === "Z") {
+            contoh = [-5, -3, -2, -1, 0, 1, 2, 3, 5];
+        }
+        else if (domain === "Q") {
+            contoh = [-2, -1, -0.5, 0, 0.5, 1, 2];
+        }
+        else if (domain === "R") {
+            contoh = [-2.5, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2.5];
+        }
+        else {
+            contoh = [
+                new BilanganKompleks(0, 0),
+                new BilanganKompleks(1, 0),
+                new BilanganKompleks(-1, 0),
+                new BilanganKompleks(0, 1),
+                new BilanganKompleks(0, -1),
+                new BilanganKompleks(1, 1),
+                new BilanganKompleks(-1, 1)
+            ];
+        }
+
+        /* ======================================================
+           CEK PENJUMlAHAN DAN PERKALIAN
+        ====================================================== */
+
+        let gagalJumlah = null;
+        let gagalKali = null;
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const kiri = evaluasi(tambahDomain(a, b));
+                const kanan = tambahKodomain(evaluasi(a), evaluasi(b));
+
+                if (!sama(kiri, kanan)) {
+                    gagalJumlah = {
+                        a,
+                        b,
+                        ab: tambahDomain(a, b),
+                        kiri,
+                        kanan
+                    };
+                    break;
+                }
+            }
+            if (gagalJumlah) break;
+        }
+
+        for (const a of contoh) {
+            for (const b of contoh) {
+
+                const kiri = evaluasi(kaliDomain(a, b));
+                const kanan = kaliKodomain(evaluasi(a), evaluasi(b));
+
+                if (!sama(kiri, kanan)) {
+                    gagalKali = {
+                        a,
+                        b,
+                        ab: kaliDomain(a, b),
+                        kiri,
+                        kanan
+                    };
+                    break;
+                }
+            }
+            if (gagalKali) break;
+        }
+
+        const homomorfisma =
+            gagalJumlah === null &&
+            gagalKali === null;
+
+        const aJ = gagalJumlah ? gagalJumlah.a : contoh[Math.min(1, contoh.length - 1)];
+        const bJ = gagalJumlah ? gagalJumlah.b : contoh[Math.min(2, contoh.length - 1)];
+        const aK = gagalKali ? gagalKali.a : contoh[Math.min(1, contoh.length - 1)];
+        const bK = gagalKali ? gagalKali.b : contoh[Math.min(2, contoh.length - 1)];
+
+        const d = namaRing[domain];
+        const k = namaRing[kodomain];
+
+        /* ======================================================
+           INFORMASI FUNGSI
+        ====================================================== */
+
+        let informasi = `
+            <div class="box">
+                <div class="section-title">
+                    Informasi Fungsi
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Ring Domain :</strong>
+                        ${d}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Ring Kodomain :</strong>
+                        ${k}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi Pemetaan :</strong>
+                        f : ${d} → ${k}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Elemen Domain :</strong>
+                        ${domain === "Zn" ? n : "Tak hingga"}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Variabel :</strong>
+                        ${variabelInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Fungsi :</strong>
+                        f(${variabelInput}) = ${fungsiInput}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Jumlah Variabel :</strong>
+                        ${variabel.length}
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Contoh Elemen Domain :</strong>
+                        {${contoh.map(fmt).join(", ")}}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        /* ======================================================
+           STATUS
+        ====================================================== */
+
+        let status = `
+            <div class="box">
+                <div class="status ${homomorfisma ? "status-hijau" : "status-merah"}">
+                    ${homomorfisma
+                        ? "✓ MERUPAKAN HOMOMORFISMA RING"
+                        : "✗ BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        /* ======================================================
+           SYARAT
+        ====================================================== */
+
+        let syarat = `
+            <div class="box">
+                <div class="section-title">
+                    Syarat Homomorfisma Ring
+                </div>
+
+                <div class="syarat">
+                    <strong>1. Mempertahankan penjumlahan:</strong>
+                    <div class="formula">
+                        f(a + b) = f(a) + f(b)
+                    </div>
+
+                    <strong>2. Mempertahankan perkalian:</strong>
+                    <div class="formula">
+                        f(ab) = f(a)f(b)
+                    </div>
+                </div>
+            </div>
+        `;
+
+        /* ======================================================
+           PENJELASAN
+        ====================================================== */
+
+        let penjelasan = `
+            <div class="box">
+                <div class="section-title">
+                    Penjelasan
+                </div>
+
+                <p>
+                    Untuk menentukan apakah fungsi
+                    <strong>f : ${d} → ${k}</strong>
+                    merupakan homomorfisma ring, dilakukan pemeriksaan
+                    terhadap sifat penjumlahan dan perkalian.
+                </p>
+
+                <h4>1. Mempertahankan Operasi Penjumlahan</h4>
+
+                <div class="formula">
+                    f(a + b) = f(a) + f(b)
+                </div>
+
+                <p>
+                    Ambil contoh
+                    <strong>a = ${fmt(aJ)}</strong>
+                    dan
+                    <strong>b = ${fmt(bJ)}</strong>.
+                </p>
+
+                <div class="formula">
+                    a + b = ${fmt(tambahDomain(aJ, bJ))}
+                </div>
+
+                <div class="formula">
+                    f(a + b) = ${fmt(evaluasi(tambahDomain(aJ, bJ)))}
+                </div>
+
+                <div class="formula">
+                    f(a) + f(b) =
+                    ${fmt(evaluasi(aJ))} + ${fmt(evaluasi(bJ))}
+                    = ${fmt(tambahKodomain(evaluasi(aJ), evaluasi(bJ)))}
+                </div>
+
+                ${gagalJumlah
+                    ? `<p>Karena kedua hasil berbeda, maka sifat penjumlahan <strong>tidak terpenuhi</strong>.</p>`
+                    : `<p>Hasil pada contoh sama, dan tidak ditemukan pasangan contoh yang melanggar sifat penjumlahan.</p>`}
+
+                <h4>2. Mempertahankan Operasi Perkalian</h4>
+
+                <div class="formula">
+                    f(ab) = f(a)f(b)
+                </div>
+
+                <p>
+                    Ambil contoh
+                    <strong>a = ${fmt(aK)}</strong>
+                    dan
+                    <strong>b = ${fmt(bK)}</strong>.
+                </p>
+
+                <div class="formula">
+                    ab = ${fmt(kaliDomain(aK, bK))}
+                </div>
+
+                <div class="formula">
+                    f(ab) = ${fmt(evaluasi(kaliDomain(aK, bK)))}
+                </div>
+
+                <div class="formula">
+                    f(a)f(b) =
+                    ${fmt(evaluasi(aK))} × ${fmt(evaluasi(bK))}
+                    = ${fmt(kaliKodomain(evaluasi(aK), evaluasi(bK)))}
+                </div>
+
+                ${gagalKali
+                    ? `<p>Karena kedua hasil berbeda, maka sifat perkalian <strong>tidak terpenuhi</strong>.</p>`
+                    : `<p>Hasil pada contoh sama, dan tidak ditemukan pasangan contoh yang melanggar sifat perkalian.</p>`}
+
+                <h4>Kesimpulan Pemeriksaan</h4>
+
+                <p>
+                    Pengujian dilakukan pada pemetaan
+                    <strong>${d} → ${k}</strong>
+                    berdasarkan elemen-elemen contoh yang digunakan.
+                </p>
+            </div>
+        `;
+
+        /* ======================================================
+           KESIMPULAN
+        ====================================================== */
+
+        let kesimpulan = `
+            <div class="box">
+                <div class="kesimpulan ${homomorfisma ? "hijau" : "merah"}">
+                    ${homomorfisma
+                        ? "MERUPAKAN HOMOMORFISMA RING"
+                        : "BUKAN HOMOMORFISMA RING"}
+                </div>
+            </div>
+        `;
+
+        /* ======================================================
+           PEMETAAN
+        ====================================================== */
+
+        let tabelPemetaan = `
+            <div class="box">
+                <div class="section-title">
+                    Pemetaan
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        for (const x of contoh) {
+            tabelPemetaan += `
+                <tr>
+                    <td>${fmt(x)}</td>
+                    <td>f(${fmt(x)})</td>
+                    <td>${fmt(evaluasi(x))}</td>
+                </tr>
+            `;
+        }
+
+        tabelPemetaan += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
+        /* ======================================================
+           IMAGE
+        ====================================================== */
+
+        const image = [];
+        for (const x of contoh) {
+            const nilai = evaluasi(x);
+            if (!image.some(y => sama(y, nilai))) {
+                image.push(nilai);
+            }
+        }
+
+        let imageTable = `
+            <div class="box">
+                <div class="section-title">
+                    Image
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        for (const x of contoh) {
+            imageTable += `
+                <tr>
+                    <td>${fmt(x)}</td>
+                    <td>f(${fmt(x)})</td>
+                    <td>${fmt(evaluasi(x))}</td>
+                </tr>
+            `;
+        }
+
+        imageTable += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <br>
+                <strong>Image(f) = {${image.map(fmt).join(", ")}}</strong>
+
+                <p style="margin-top:15px;">
+                    <strong>Catatan:</strong>
+                    ${domain === "Zn"
+                        ? "karena domain Z<sub>" + n + "</sub> berhingga, tabel dapat menampilkan seluruh elemen domain yang diuji."
+                        : "karena domain merupakan himpunan tak hingga, daftar di atas adalah image yang diperoleh dari contoh pengujian, bukan daftar seluruh image secara simbolik."}
+                </p>
+            </div>
+        `;
+
+        /* ======================================================
+           KERNEL
+        ====================================================== */
+
+        const nolKodomain =
+            kodomain === "C"
+                ? new BilanganKompleks(0, 0)
+                : 0;
+
+        const kernel = contoh.filter(x => sama(evaluasi(x), nolKodomain));
+
+        let kernelTable = `
+            <div class="box">
+                <div class="section-title">
+                    Kernel
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Elemen Domain</th>
+                                <th>Fungsi f</th>
+                                <th>Daerah Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+
+        if (kernel.length === 0) {
+            kernelTable += `
+                <tr>
+                    <td colspan="3">
+                        Tidak terdapat elemen kernel pada contoh pengujian.
+                    </td>
+                </tr>
+            `;
+        } else {
+            for (const x of kernel) {
+                kernelTable += `
+                    <tr>
+                        <td>${fmt(x)}</td>
+                        <td>f(${fmt(x)})</td>
+                        <td>0</td>
+                    </tr>
+                `;
+            }
+        }
+
+        kernelTable += `
+                        </tbody>
+                    </table>
+                </div>
+
+                <br>
+                <strong>Ker(f) = {${kernel.map(fmt).join(", ")}}</strong>
+
+                <p style="margin-top:15px;">
+                    <strong>Catatan:</strong>
+                    kernel yang ditampilkan berasal dari elemen-elemen
+                    yang diperiksa pada contoh pengujian.
+                </p>
+            </div>
+        `;
+
+        /* ======================================================
+           TAMPILKAN SEMUA HASIL
+        ====================================================== */
+
+        hasil.innerHTML =
+            informasi +
+            status +
+            syarat +
+            penjelasan +
+            kesimpulan +
+            tabelPemetaan +
+            imageTable +
+            kernelTable;
+
+    }
+    catch (error) {
+        hasil.innerHTML = `
+            <div class="box">
+                <div class="status status-merah">
+                    <strong>Error:</strong>
+                    <br><br>
+                    ${error.message}
+                </div>
+            </div>
+        `;
+    }
+}
+
+
+function aturTombolUji() {
+
+    const domain = jenisDomain.value;
+    const kodomain = jenisKodomain.value;
+
+    // Z_n → Z_m tetap menggunakan pengujian modulo asli.
+    // Kombinasi lain menggunakan struktur pengujian Tahap 7
+    // dengan pola hasil yang sama seperti Z_n → Z_m.
+    if (domain === "Zn" && kodomain === "Zm") {
+        tombolUjiRing.onclick = fungsiUjiLama;
+    }
+    else if (domain === "Z" && kodomain === "Z") {
+        tombolUjiRing.onclick = ujiZZ;
+    }
+    else if (domain === "Q" && kodomain === "Q") {
+        tombolUjiRing.onclick = ujiQQ;
+    }
+    else if (domain === "R" && kodomain === "R") {
+        tombolUjiRing.onclick = ujiRR;
+    }
+    else if (domain === "C" && kodomain === "C") {
+        tombolUjiRing.onclick = ujiCC;
+    }
+    else {
+        tombolUjiRing.onclick = ujiKombinasiRing;
+    }
+}
+
+
+// Jalankan ketika pilihan ring berubah
+jenisDomain.addEventListener("change", aturTombolUji);
+jenisKodomain.addEventListener("change", aturTombolUji);
 
 
 /* =====================================================
