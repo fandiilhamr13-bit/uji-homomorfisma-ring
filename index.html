@@ -16,7 +16,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
+            background: #ffffff;
             color: #000000;
         }
 
@@ -70,13 +70,13 @@
            CONTAINER
         ========================= */
 
-        .container {
+ .container {
     max-width: 1000px;
     height: 80vh;
     margin: 20px auto;
     padding: 25px 20px 40px;
 
-    background: #EEF4F8;
+    background: transparent;
     border: 2px solid #B8C0C8;
     border-radius: 16px;
 
@@ -91,7 +91,7 @@
         ========================= */
 
         .box {
-            background: rgb(255, 255, 255);
+            background: rgb(171, 245, 241);
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 25px;
@@ -242,6 +242,37 @@
             margin-right: 5px;
         }
 
+.btn-domain {
+    background: transparent !important;
+    border: none !important;
+    color: #000000 !important;
+    cursor: pointer;
+    font-weight: normal;
+    padding: 0 !important;
+    margin: 0;
+    width: auto !important;
+    display: inline !important;
+    font-size: inherit;
+    outline: none !important;
+    box-shadow: none !important;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.btn-domain:hover,
+.btn-domain:focus,
+.btn-domain:focus-visible,
+.btn-domain:active {
+    background: transparent !important;
+    color: #000000 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.btn-domain:hover {
+    text-decoration: underline;
+}
 
         /* =========================
            STATUS
@@ -615,6 +646,53 @@ function tampilTuple(tuple) {
     }
 }
 
+/* =====================================================
+   CONTOH ELEMEN UNTUK PENJELASAN
+===================================================== */
+
+function cariContoh(domain, jenis) {
+
+    for (let a of domain) {
+
+        for (let b of domain) {
+
+            // Hindari contoh yang terlalu sederhana jika masih
+            // tersedia contoh lain
+            let bukanTrivial =
+                JSON.stringify(a) !== JSON.stringify(b) ||
+                a.some(nilai => nilai !== 0) ||
+                b.some(nilai => nilai !== 0);
+
+            if (!bukanTrivial) {
+                continue;
+            }
+
+            if (jenis === "jumlah") {
+
+                return {
+                    a: [...a],
+                    b: [...b]
+                };
+
+            }
+
+            if (jenis === "kali") {
+
+                return {
+                    a: [...a],
+                    b: [...b]
+                };
+
+            }
+        }
+    }
+
+    // Jika tidak ditemukan, gunakan elemen pertama
+    return {
+        a: [...domain[0]],
+        b: [...domain[0]]
+    };
+}
 
 /* =====================================================
    FUNGSI DINAMIS
@@ -1078,20 +1156,23 @@ function ujiHomomorfisma() {
 
 
                     <div class="info-item">
-
                         <strong>Ring Kodomain :</strong>
-
-                        Z<sub>${m}</sub>
-
+                            Z<sub>${m}</sub>
                     </div>
 
+                    <div class="info-item">
+                         <strong>Fungsi Pemetaan :</strong>
+                            f : Z<sub>${n}</sub> → Z<sub>${m}</sub>
+                    </div>
 
                     <div class="info-item">
+                        <strong>Jumlah Elemen Domain :</strong>
+                            ${jumlahElemen}
+                    </div>
 
+                    <div class="info-item">
                         <strong>Variabel :</strong>
-
-                        ${variabel.join(", ")}
-
+                            ${variabel.join(", ")}
                     </div>
 
 
@@ -1114,17 +1195,26 @@ function ujiHomomorfisma() {
 
                     </div>
 
-
                     <div class="info-item">
-
                         <strong>Elemen Domain :</strong>
 
-                        {${domain
-                            .map(tampilTuple)
-                            .join(", ")}}
+                        <span id="domainPreview">
+                            {${domain
+                                .slice(0, 4)
+                                .map(tampilTuple)
+                                .join(", ")}${domain.length > 4
+                                    ? `, ..., <button type="button" id="btnLihatDomain" class="btn-domain">Lihat selengkapnya</button>`
+                                    : ""}}
+                        </span>
 
+                        <span id="domainLengkap" style="display:none;">
+                            {${domain
+                                .map(tampilTuple)
+                                .join(", ")}${domain.length > 0
+                                    ? `, <button type="button" id="btnTutupDomain" class="btn-domain">Sembunyikan</button>`
+                                    : ""}}
+                        </span>
                     </div>
-
                 </div>
 
             </div>
@@ -1232,282 +1322,700 @@ function ujiHomomorfisma() {
         `;
 
 
-        /* =============================================
-           PENJELASAN
-        ============================================= */
-
-        let penjelasan = `
-
-            <div class="box">
-
-                <div class="section-title">
-                    Penjelasan
-                </div>
-
-                <div class="penjelasan">
-
-        `;
-
-
-        /* =============================================
-           SYARAT 1
-        ============================================= */
-
-        penjelasan += `
-
-            <h4>
-                Syarat 1: Penjumlahan
-            </h4>
-
-        `;
-
-
-        if (gagalJumlah === null) {
-
-            penjelasan += `
-
-                Untuk seluruh elemen
-                a,b pada domain,
-                diperoleh:
-
-                <div class="formula">
-
-                    f(a+b) = f(a)+f(b)
-
-                </div>
-
-                Program telah memeriksa seluruh pasangan
-                elemen domain dan tidak menemukan
-                pelanggaran terhadap sifat penjumlahan.
-
-                <br><br>
-
-                Dengan demikian, sifat penjumlahan
-                <strong>terpenuhi</strong>.
-
-            `;
-
-        }
-
-        else {
-
-            penjelasan += `
-
-                Ambil contoh:
-
-                <br><br>
-
-                a = ${tampilTuple(gagalJumlah.a)}
-
-                <br>
-
-                b = ${tampilTuple(gagalJumlah.b)}
-
-                <br><br>
-
-                Penjumlahan kedua elemen:
-
-                <div class="formula">
-
-                    a+b =
-                    ${tampilTuple(gagalJumlah.aTambahB)}
-
-                </div>
-
-
-                Kemudian:
-
-                <br><br>
-
-                <strong>
-
-                f(a+b)
-                =
-                f(${tampilTuple(gagalJumlah.aTambahB)})
-                =
-                ${gagalJumlah.kiri}
-
-                </strong>
-
-                <br><br>
-
-                Sedangkan:
-
-                <br><br>
-
-                <strong>
-
-                f(a)+f(b)
-                =
-                ${gagalJumlah.fa}
-                +
-                ${gagalJumlah.fb}
-                =
-                ${gagalJumlah.kanan}
-
-                </strong>
-
-                <br><br>
-
-                Karena:
-
-                <div class="formula">
-
-                    ${gagalJumlah.kiri}
-                    ≠
-                    ${gagalJumlah.kanan}
-
-                </div>
-
-                maka:
-
-                <div class="formula">
-
-                    f(a+b) ≠ f(a)+f(b)
-
-                </div>
-
-                sehingga sifat penjumlahan
-                <strong>tidak terpenuhi</strong>.
-
-            `;
-
-        }
-
-
-        /* =============================================
-           SYARAT 2
-        ============================================= */
-
-        penjelasan += `
-
-            <h4>
-                Syarat 2: Perkalian
-            </h4>
-
-        `;
-
-
-        if (gagalKali === null) {
-
-            penjelasan += `
-
-                Untuk seluruh elemen
-                a,b pada domain,
-                diperoleh:
-
-                <div class="formula">
-
-                    f(ab) = f(a)f(b)
-
-                </div>
-
-                Program telah memeriksa seluruh pasangan
-                elemen domain dan tidak menemukan
-                pelanggaran terhadap sifat perkalian.
-
-                <br><br>
-
-                Dengan demikian, sifat perkalian
-                <strong>terpenuhi</strong>.
-
-            `;
-
-        }
-
-        else {
-
-            penjelasan += `
-
-                Ambil contoh:
-
-                <br><br>
-
-                a = ${tampilTuple(gagalKali.a)}
-
-                <br>
-
-                b = ${tampilTuple(gagalKali.b)}
-
-                <br><br>
-
-                Perkalian kedua elemen:
-
-                <div class="formula">
-
-                    ab =
-                    ${tampilTuple(gagalKali.aKaliB)}
-
-                </div>
-
-
-                Kemudian:
-
-                <br><br>
-
-                <strong>
-
-                f(ab)
-                =
-                f(${tampilTuple(gagalKali.aKaliB)})
-                =
-                ${gagalKali.kiri}
-
-                </strong>
-
-                <br><br>
-
-                Sedangkan:
-
-                <br><br>
-
-                <strong>
-
-                f(a)f(b)
-                =
-                ${gagalKali.fa}
-                ×
-                ${gagalKali.fb}
-                =
-                ${gagalKali.kanan}
-
-                </strong>
-
-                <br><br>
-
-                Karena:
-
-                <div class="formula">
-
-                    ${gagalKali.kiri}
-                    ≠
-                    ${gagalKali.kanan}
-
-                </div>
-
-                maka:
-
-                <div class="formula">
-
-                    f(ab) ≠ f(a)f(b)
-
-                </div>
-
-                sehingga sifat perkalian
-                <strong>tidak terpenuhi</strong>.
-
-            `;
-
-        }
-
-
-        penjelasan += `
-
-                </div>
-
+/* =============================================
+   PENJELASAN
+============================================= */
+
+let penjelasan = `
+    <div class="box">
+        <div class="section-title">
+            Penjelasan
+        </div>
+
+        <div class="penjelasan">
+
+            <p>
+                Untuk menentukan apakah fungsi
+                <strong>f</strong> merupakan homomorfisma ring,
+                program memeriksa dua sifat utama, yaitu:
+            </p>
+
+            <div class="formula">
+                f(a + b) = f(a) + f(b)
             </div>
 
-        `;
+            <p>
+                untuk operasi penjumlahan, dan
+            </p>
+
+            <div class="formula">
+                f(ab) = f(a)f(b)
+            </div>
+
+            <p>
+                untuk operasi perkalian.
+            </p>
+
+            <p>
+                Pemeriksaan dilakukan pada seluruh elemen
+                domain dan seluruh pasangan elemen domain.
+                Operasi pada domain dilakukan modulo
+                <strong>${n}</strong>, sedangkan hasil fungsi
+                berada pada ring kodomain
+                <strong>Z<sub>${m}</sub></strong>.
+            </p>
+
+`;
+
+
+/* =====================================================
+   CONTOH UNTUK PENJUMLAHAN
+===================================================== */
+
+let contohJumlah;
+
+if (gagalJumlah !== null) {
+
+    contohJumlah = {
+        a: [...gagalJumlah.a],
+        b: [...gagalJumlah.b]
+    };
+
+}
+else {
+
+    contohJumlah =
+        cariContoh(domain, "jumlah");
+}
+
+
+let aJumlah =
+    contohJumlah.a;
+
+let bJumlah =
+    contohJumlah.b;
+
+let aTambahB =
+    tambahTuple(
+        aJumlah,
+        bJumlah,
+        n
+    );
+
+let fAJumlah =
+    f(aJumlah);
+
+let fBJumlah =
+    f(bJumlah);
+
+let fATambahB =
+    f(aTambahB);
+
+let fAJumlahTambahFB =
+    modulo(
+        fAJumlah + fBJumlah,
+        m
+    );
+
+
+/* =====================================================
+   PENJELASAN PENJUMLAHAN
+===================================================== */
+
+penjelasan += `
+
+    <h4>
+        Syarat 1: Mempertahankan Operasi Penjumlahan
+    </h4>
+
+    <p>
+        Syarat pertama homomorfisma ring adalah:
+    </p>
+
+    <div class="formula">
+        f(a + b) = f(a) + f(b)
+    </div>
+
+    <p>
+        Artinya, kita mengambil dua elemen
+        <strong>a</strong> dan <strong>b</strong>
+        dari ring domain, kemudian membandingkan
+        hasil fungsi dari penjumlahan keduanya dengan
+        penjumlahan hasil fungsi masing-masing elemen.
+    </p>
+
+    <p>
+        Sebagai contoh, kita ambil dua elemen dari domain:
+    </p>
+
+    <div class="formula">
+        a = ${tampilTuple(aJumlah)}
+        &nbsp;&nbsp;&nbsp;
+        b = ${tampilTuple(bJumlah)}
+    </div>
+
+    <p>
+        Selanjutnya, kita hitung penjumlahan
+        kedua elemen tersebut di dalam ring domain
+        <strong>Z<sub>${n}</sub></strong>.
+        Karena operasi dilakukan modulo ${n}, maka:
+    </p>
+
+    <div class="formula">
+        a + b
+        =
+        ${tampilTuple(aJumlah)}
+        +
+        ${tampilTuple(bJumlah)}
+        =
+        ${tampilTuple(aTambahB)}
+        &nbsp; (mod ${n})
+    </div>
+
+    <p>
+        Jadi, hasil penjumlahan kedua elemen di domain adalah:
+    </p>
+
+    <div class="formula">
+        a + b = ${tampilTuple(aTambahB)}
+    </div>
+
+    <p>
+        Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+        Diperoleh:
+    </p>
+
+    <div class="formula">
+        f(a + b)
+        =
+        f(${tampilTuple(aTambahB)})
+        =
+        ${fATambahB}
+    </div>
+
+    <p>
+        Selanjutnya, kita hitung bagian sebelah kanan,
+        yaitu <strong>f(a) + f(b)</strong>.
+    </p>
+
+    <div class="formula">
+        f(a)
+        =
+        f(${tampilTuple(aJumlah)})
+        =
+        ${fAJumlah}
+    </div>
+
+    <div class="formula">
+        f(b)
+        =
+        f(${tampilTuple(bJumlah)})
+        =
+        ${fBJumlah}
+    </div>
+
+    <p>
+        Kemudian kedua hasil tersebut dijumlahkan
+        pada ring kodomain
+        <strong>Z<sub>${m}</sub></strong>:
+    </p>
+
+    <div class="formula">
+        f(a) + f(b)
+        =
+        ${fAJumlah} + ${fBJumlah}
+        =
+        ${fAJumlahTambahFB}
+        &nbsp; (mod ${m})
+    </div>
+
+    <p>
+        Dengan demikian, kita memperoleh:
+    </p>
+
+    <div class="formula">
+        f(a + b) = ${fATambahB}
+    </div>
+
+    <div class="formula">
+        f(a) + f(b) = ${fAJumlahTambahFB}
+    </div>
+
+`;
+
+
+/* =====================================================
+   HASIL PENJUMLAHAN
+===================================================== */
+
+if (gagalJumlah === null) {
+
+    penjelasan += `
+
+        <p>
+            Karena kedua hasil tersebut sama, maka untuk
+            contoh yang dipilih diperoleh:
+        </p>
+
+        <div class="formula">
+            ${fATambahB} = ${fAJumlahTambahFB}
+        </div>
+
+        <p>
+            Namun, satu contoh saja belum cukup untuk
+            menyatakan bahwa fungsi merupakan homomorfisma.
+            Oleh karena itu, program memeriksa
+            <strong>seluruh pasangan elemen</strong>
+            pada domain.
+        </p>
+
+        <p>
+            Setelah seluruh pasangan elemen diperiksa,
+            tidak ditemukan satu pun pasangan yang melanggar
+            persamaan:
+        </p>
+
+        <div class="formula">
+            f(a + b) = f(a) + f(b)
+        </div>
+
+        <p>
+            Dengan demikian, fungsi
+            <strong>mempertahankan operasi penjumlahan</strong>.
+            Jadi, syarat pertama homomorfisma ring
+            <strong>terpenuhi</strong>.
+        </p>
+
+    `;
+
+}
+else {
+
+    penjelasan += `
+
+        <p>
+            Pada contoh tersebut diperoleh:
+        </p>
+
+        <div class="formula">
+            f(a + b) = ${fATambahB}
+        </div>
+
+        <div class="formula">
+            f(a) + f(b) = ${fAJumlahTambahFB}
+        </div>
+
+        <p>
+            Karena:
+        </p>
+
+        <div class="formula">
+            ${fATambahB} ≠ ${fAJumlahTambahFB}
+        </div>
+
+        <p>
+            maka:
+        </p>
+
+        <div class="formula">
+            f(a + b) ≠ f(a) + f(b)
+        </div>
+
+        <p>
+            Artinya, ditemukan pasangan elemen
+            <strong>a = ${tampilTuple(aJumlah)}</strong>
+            dan
+            <strong>b = ${tampilTuple(bJumlah)}</strong>
+            yang tidak memenuhi sifat mempertahankan
+            operasi penjumlahan.
+        </p>
+
+        <p>
+            Karena cukup ditemukan satu pasangan elemen
+            yang melanggar sifat tersebut, maka
+            fungsi <strong>tidak mempertahankan operasi penjumlahan</strong>.
+            Dengan demikian, syarat pertama
+            homomorfisma ring <strong>tidak terpenuhi</strong>.
+        </p>
+
+    `;
+}
+
+
+/* =====================================================
+   CONTOH UNTUK PERKALIAN
+===================================================== */
+
+let contohKali;
+
+if (gagalKali !== null) {
+
+    contohKali = {
+        a: [...gagalKali.a],
+        b: [...gagalKali.b]
+    };
+
+}
+else {
+
+    contohKali =
+        cariContoh(domain, "kali");
+}
+
+
+let aKali =
+    contohKali.a;
+
+let bKali =
+    contohKali.b;
+
+let aKaliB =
+    kaliTuple(
+        aKali,
+        bKali,
+        n
+    );
+
+let fAKali =
+    f(aKali);
+
+let fBKali =
+    f(bKali);
+
+let fAKaliB =
+    f(aKaliB);
+
+let fAKaliKaliFB =
+    modulo(
+        fAKali * fBKali,
+        m
+    );
+
+
+/* =====================================================
+   PENJELASAN PERKALIAN
+===================================================== */
+
+penjelasan += `
+
+    <h4>
+        Syarat 2: Mempertahankan Operasi Perkalian
+    </h4>
+
+    <p>
+        Syarat kedua homomorfisma ring adalah:
+    </p>
+
+    <div class="formula">
+        f(ab) = f(a)f(b)
+    </div>
+
+    <p>
+        Artinya, kita mengambil dua elemen
+        <strong>a</strong> dan <strong>b</strong>
+        dari ring domain, kemudian membandingkan
+        hasil fungsi dari perkalian keduanya dengan
+        perkalian hasil fungsi masing-masing elemen.
+    </p>
+
+    <p>
+        Sebagai contoh, kita ambil dua elemen dari domain:
+    </p>
+
+    <div class="formula">
+        a = ${tampilTuple(aKali)}
+        &nbsp;&nbsp;&nbsp;
+        b = ${tampilTuple(bKali)}
+    </div>
+
+    <p>
+        Selanjutnya, kita hitung perkalian kedua elemen
+        tersebut di dalam ring domain
+        <strong>Z<sub>${n}</sub></strong>.
+        Karena operasi dilakukan modulo ${n}, maka:
+    </p>
+
+    <div class="formula">
+        ab
+        =
+        ${tampilTuple(aKali)}
+        ×
+        ${tampilTuple(bKali)}
+        =
+        ${tampilTuple(aKaliB)}
+        &nbsp; (mod ${n})
+    </div>
+
+    <p>
+        Jadi, hasil perkalian kedua elemen di domain adalah:
+    </p>
+
+    <div class="formula">
+        ab = ${tampilTuple(aKaliB)}
+    </div>
+
+    <p>
+        Sekarang kita masukkan hasil tersebut ke dalam fungsi.
+        Diperoleh:
+    </p>
+
+    <div class="formula">
+        f(ab)
+        =
+        f(${tampilTuple(aKaliB)})
+        =
+        ${fAKaliB}
+    </div>
+
+    <p>
+        Selanjutnya, kita hitung bagian sebelah kanan,
+        yaitu <strong>f(a)f(b)</strong>.
+    </p>
+
+    <div class="formula">
+        f(a)
+        =
+        f(${tampilTuple(aKali)})
+        =
+        ${fAKali}
+    </div>
+
+    <div class="formula">
+        f(b)
+        =
+        f(${tampilTuple(bKali)})
+        =
+        ${fBKali}
+    </div>
+
+    <p>
+        Kemudian kedua hasil tersebut dikalikan
+        pada ring kodomain
+        <strong>Z<sub>${m}</sub></strong>:
+    </p>
+
+    <div class="formula">
+        f(a)f(b)
+        =
+        ${fAKali} × ${fBKali}
+        =
+        ${fAKaliKaliFB}
+        &nbsp; (mod ${m})
+    </div>
+
+    <p>
+        Dengan demikian, kita memperoleh:
+    </p>
+
+    <div class="formula">
+        f(ab) = ${fAKaliB}
+    </div>
+
+    <div class="formula">
+        f(a)f(b) = ${fAKaliKaliFB}
+    </div>
+
+`;
+
+
+/* =====================================================
+   HASIL PERKALIAN
+===================================================== */
+
+if (gagalKali === null) {
+
+    penjelasan += `
+
+        <p>
+            Karena kedua hasil tersebut sama, maka untuk
+            contoh yang dipilih diperoleh:
+        </p>
+
+        <div class="formula">
+            ${fAKaliB} = ${fAKaliKaliFB}
+        </div>
+
+        <p>
+            Sama seperti pada penjumlahan, satu contoh
+            belum cukup untuk menyatakan bahwa fungsi
+            merupakan homomorfisma. Oleh karena itu,
+            program memeriksa <strong>seluruh pasangan elemen</strong>
+            pada domain.
+        </p>
+
+        <p>
+            Setelah seluruh pasangan elemen diperiksa,
+            tidak ditemukan pasangan yang melanggar
+            persamaan:
+        </p>
+
+        <div class="formula">
+            f(ab) = f(a)f(b)
+        </div>
+
+        <p>
+            Dengan demikian, fungsi
+            <strong>mempertahankan operasi perkalian</strong>.
+            Jadi, syarat kedua homomorfisma ring
+            <strong>terpenuhi</strong>.
+        </p>
+
+    `;
+
+}
+else {
+
+    penjelasan += `
+
+        <p>
+            Pada contoh tersebut diperoleh:
+        </p>
+
+        <div class="formula">
+            f(ab) = ${fAKaliB}
+        </div>
+
+        <div class="formula">
+            f(a)f(b) = ${fAKaliKaliFB}
+        </div>
+
+        <p>
+            Karena:
+        </p>
+
+        <div class="formula">
+            ${fAKaliB} ≠ ${fAKaliKaliFB}
+        </div>
+
+        <p>
+            maka:
+        </p>
+
+        <div class="formula">
+            f(ab) ≠ f(a)f(b)
+        </div>
+
+        <p>
+            Artinya, ditemukan pasangan elemen
+            <strong>a = ${tampilTuple(aKali)}</strong>
+            dan
+            <strong>b = ${tampilTuple(bKali)}</strong>
+            yang tidak memenuhi sifat mempertahankan
+            operasi perkalian.
+        </p>
+
+        <p>
+            Karena cukup ditemukan satu pasangan elemen
+            yang melanggar sifat tersebut, maka
+            fungsi <strong>tidak mempertahankan operasi perkalian</strong>.
+            Dengan demikian, syarat kedua
+            homomorfisma ring <strong>tidak terpenuhi</strong>.
+        </p>
+
+    `;
+}
+
+
+/* =====================================================
+   KESIMPULAN PENJELASAN
+===================================================== */
+
+if (homomorfisma) {
+
+    penjelasan += `
+
+        <h4>
+            Kesimpulan Pemeriksaan
+        </h4>
+
+        <p>
+            Berdasarkan pemeriksaan yang telah dilakukan,
+            sifat penjumlahan dan sifat perkalian
+            keduanya terpenuhi untuk seluruh pasangan
+            elemen pada domain.
+        </p>
+
+        <div class="formula">
+            f(a + b) = f(a) + f(b)
+        </div>
+
+        <div class="formula">
+            f(ab) = f(a)f(b)
+        </div>
+
+        <p>
+            Oleh karena itu, fungsi
+            <strong>f : Z<sub>${n}</sub> → Z<sub>${m}</sub></strong>
+            <strong>merupakan homomorfisma ring</strong>.
+        </p>
+
+        <p>
+            Perlu diperhatikan bahwa kesimpulan tersebut
+            tidak hanya berdasarkan contoh yang ditampilkan,
+            tetapi berdasarkan pemeriksaan seluruh pasangan
+            elemen domain oleh program.
+        </p>
+
+    `;
+
+}
+else {
+
+    penjelasan += `
+
+        <h4>
+            Kesimpulan Pemeriksaan
+        </h4>
+
+        <p>
+            Berdasarkan pemeriksaan yang telah dilakukan,
+            terdapat setidaknya satu sifat operasi ring
+            yang tidak dipertahankan oleh fungsi.
+        </p>
+
+        ${
+            gagalJumlah !== null
+            ? `
+                <div class="formula">
+                    f(a + b) ≠ f(a) + f(b)
+                </div>
+              `
+            : ""
+        }
+
+        ${
+            gagalKali !== null
+            ? `
+                <div class="formula">
+                    f(ab) ≠ f(a)f(b)
+                </div>
+              `
+            : ""
+        }
+
+        <p>
+            Karena homomorfisma ring harus mempertahankan
+            operasi penjumlahan dan perkalian, maka fungsi
+            <strong>f : Z<sub>${n}</sub> → Z<sub>${m}</sub></strong>
+            <strong>bukan merupakan homomorfisma ring</strong>.
+        </p>
+
+        <p>
+            Contoh pasangan elemen yang ditampilkan di atas
+            merupakan contoh konkret yang menyebabkan
+            kegagalan sifat homomorfisma tersebut.
+        </p>
+
+    `;
+
+}
+
+
+penjelasan += `
+
+        </div>
+    </div>
+`;
 
 
         /* =============================================
@@ -1878,7 +2386,24 @@ function ujiHomomorfisma() {
 
             kernelTable;
 
+            const btnLihat = document.getElementById("btnLihatDomain");
+            const btnTutup = document.getElementById("btnTutupDomain");
+            const preview = document.getElementById("domainPreview");
+            const lengkap = document.getElementById("domainLengkap");
 
+            if (btnLihat) {
+                btnLihat.addEventListener("click", () => {
+                    preview.style.display = "none";
+                    lengkap.style.display = "block";
+                });
+            }
+
+            if (btnTutup) {
+                btnTutup.addEventListener("click", () => {
+                    lengkap.style.display = "none";
+                    preview.style.display = "block";
+                });
+            }
     }
 
     catch (error) {
